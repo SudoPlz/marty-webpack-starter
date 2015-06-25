@@ -1,1 +1,1 @@
-export default require('./loginForm.js');
+export default require('./modalLogin.js');

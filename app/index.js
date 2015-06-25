@@ -10,11 +10,11 @@ window.React = React;
 window.Marty = Marty;
 
 app.router.run((Handler, state) => {
-  app.navigationActionCreators.changeRoute(state, Handler);
+    app.navigationActionCreators.changeRoute(state, Handler);
 
-  React.render((
-    <ApplicationContainer app={app}>
-      <Handler {...state.params} />
-    </ApplicationContainer>
-  ), document.getElementById('app'));
+    React.render((
+        <ApplicationContainer app={app}>
+            <Handler {...state.params} />
+        </ApplicationContainer>
+    ), document.getElementById('app'));
 });

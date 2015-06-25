@@ -3,5 +3,6 @@
   "API": {
     "ROOT": "http://my-api/",
     "AUTH_SCHEME": "my-auth-scheme"
-  }
+  },
+  "DEV_PORT":3000
 }
