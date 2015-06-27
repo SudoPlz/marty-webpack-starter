@@ -17,7 +17,7 @@ class Application extends Marty.Application {
     requireFromContext(context, key => {
       // NOTE: id could potentially clash if files are named the same.
       let id = key.substr(key.lastIndexOf('/') + 1);
-      console.log('registering ', id);
+      console.log('Registering marty assets: ', id);
       this.register(id, context(key));
     });
   }

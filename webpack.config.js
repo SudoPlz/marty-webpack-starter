@@ -40,12 +40,12 @@ module.exports = {
             { test: /app\/.*\.json$/, loader: 'json-loader' },
 
             // Styles
-            { test: /\.css$/, loader: "style-loader!css-loader" },
-            { test: /\.s(a|c)ss$/, loader: "style!css?localIdentName=[path][name]---[local]---[hash:base64:5]!postcss!sass" },
+            { test: /\.css$/, loader: 'style-loader!css-loader' },
+            { test: /\.s(a|c)ss$/, loader: 'style!css?localIdentName=[path][name]---[local]---[hash:base64:5]!postcss!sass' },
 
             // Fonts
-            { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&minetype=application/font-woff" },
-            { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
+            { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&minetype=application/font-woff' },
+            { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' }
 
         ],
 
