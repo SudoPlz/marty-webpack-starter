@@ -7,7 +7,7 @@ var buildPath = path.resolve(__dirname, 'assets');
 module.exports = {
     entry: [
         './app/index.js',
-        'webpack/hot/only-dev-server',
+        'webpack/hot/dev-server',
         'webpack-dev-server/client?http://localhost:8081'  // WebpackDevServer host and port
     ],
     output: {
@@ -47,6 +47,8 @@ module.exports = {
             { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&minetype=application/font-woff' },
             { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' }
 
+            //{ test: /\.png$/, loader: "url-loader?limit=100000" },
+            //{ test: /\.jpg$/, loader: "file-loader" }
         ],
 
         plugins: [

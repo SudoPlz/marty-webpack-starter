@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+
+var expressServer = require('../app/server/express');
+
+//run express server
+
+expressServer.listen(expressServer.get('port'), function() {
+    console.info('Express server started at http://localhost:' + expressServer.get('port'));
+});

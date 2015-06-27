@@ -6,6 +6,7 @@
         "blockBindings": true,
         "binaryLiterals": false,                    // enable binary literals
         "blockBindings": true,                     // enable let and const (aka block bindings)
+        "classes":true,
         "defaultParams": true,                     // enable default function parameters
         "forOf": false,                             // enable for-of loops
         "generators": true,                        // enable generators
@@ -19,7 +20,8 @@
         "templateStrings": false,                   // enable template strings
         "unicodeCodePointEscapes": false,           // enable code point escapes
         "destructuring": true,
-        "jsx": true                                // enable JSX
+        "jsx": true,                                // enable JSX
+        "modules": true
       },
 
       "env": {

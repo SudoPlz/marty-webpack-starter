@@ -1,8 +1,9 @@
 import React from 'react';
 import {RouteHandler} from 'react-router';
 import NavBar from './components/navbar';
-import 'bootstrap/dist/css/bootstrap.css';
+//import 'bootstrap/dist/css/bootstrap.css';
 import './styles/app.scss';
+import './styles/css/rbm-complete.css';
 
 
 class Layout extends React.Component {
