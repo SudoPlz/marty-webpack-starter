@@ -48,7 +48,7 @@
 
   },
   "scripts": {
-    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --content-base ./assets --hot --port 8080",
+    "start": "babel-node bin/www",
     "lint":"eslint app/ -c .eslintrc",
     "moveJs":"cp node_modules/marty-clipboard/dist/marty-clipboard.js dist/javascripts/",
     "moveCss":"cp node_modules/react-bootstrap-modal/lib/styles/rbm-complete.css app/styles/"
