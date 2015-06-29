@@ -88,23 +88,23 @@
 
 	app.use(morgan('dev'));
 	app.use(bodyParser.json());
-	//app.use(require('marty-express')({
-	//    routes: require('../routes'),
-	//    application: require('../application'),
-	//    rendered: function (result) {
-	//        console.log('Rendered ' + result.req.url);
-	//    }
-	//
-	//}));
+	app.use(__webpack_require__(49)({
+	    routes: __webpack_require__(12),
+	    application: __webpack_require__(8),
+	    rendered: function rendered(result) {
+	        console.log('Rendered ' + result.req.url);
+	    }
 
-	var Application = __webpack_require__(8);
-	var appl = new Application();
-	console.log('Application: ' + appl);
+	}));
+
+	//var Application = require('../application');
+	//var appl = new Application();
+	//console.log('Application: '+appl);
 	//console.log('Required ejs file: ' + require('./views/index.ejs'));
-	app.get('/*', function (req, res) {
-	    //res.sendFile(__dirname + '/index.html');
-	    res.render('index', { body: 'YO bro', state: 'ok' });
-	});
+	//app.get('/*', function(req, res) {
+	//    //res.sendFile(__dirname + '/index.html');
+	//      res.render('index', {body: 'YO bro', state:'ok'});
+	//});
 
 	var server = app.listen(app.get('port'), function () {
 	    console.info('Express server started at http://localhost:' + app.get('port'));
@@ -2673,6 +2673,12 @@
 	});
 
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "httpHooks.js" + ": " + err.message); } }); } } })(); }
+
+/***/ },
+/* 49 */
+/***/ function(module, exports) {
+
+	module.exports = require("marty-express");
 
 /***/ }
 /******/ ]);

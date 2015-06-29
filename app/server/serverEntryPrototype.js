@@ -45,24 +45,24 @@
 
     app.use(morgan('dev'));
     app.use(bodyParser.json());
-    //app.use(require('marty-express')({
-    //    routes: require('../routes'),
-    //    application: require('../application'),
-    //    rendered: function (result) {
-    //        console.log('Rendered ' + result.req.url);
-    //    }
-    //
-    //}));
+    app.use(require('marty-express')({
+        routes: require('../routes'),
+        application: require('../application'),
+        rendered: function (result) {
+            console.log('Rendered ' + result.req.url);
+        }
+
+    }));
 
 
-    var Application = require('../application');
-    var appl = new Application();
-    console.log('Application: '+appl);
+    //var Application = require('../application');
+    //var appl = new Application();
+    //console.log('Application: '+appl);
     //console.log('Required ejs file: ' + require('./views/index.ejs'));
-    app.get('/*', function(req, res) {
-        //res.sendFile(__dirname + '/index.html');
-          res.render('index', {body: 'YO bro', state:'ok'});
-    });
+    //app.get('/*', function(req, res) {
+    //    //res.sendFile(__dirname + '/index.html');
+    //      res.render('index', {body: 'YO bro', state:'ok'});
+    //});
 
 
     var server = app.listen(app.get('port'), function() {
