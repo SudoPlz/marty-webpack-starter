@@ -14,7 +14,7 @@ fs.readdirSync('node_modules')
         nodeModules[mod] = 'commonjs ' + mod;
     });
 
-console.log('Node Modules: '+ JSON.stringify(nodeModules));
+//console.log('Node Modules: '+ JSON.stringify(nodeModules));
 module.exports =
 
 {

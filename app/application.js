@@ -17,7 +17,7 @@ class Application extends Marty.Application {
         requireFromContext(context, key => {
             // NOTE: id could potentially clash if files are named the same.
             let id = key.substr(key.lastIndexOf('/') + 1);
-            console.log('Registering marty assets: ', id);
+            //console.log('Registering marty assets: ', id);
             this.register(id, context(key));
         });
 
@@ -37,9 +37,9 @@ class Application extends Marty.Application {
         super(options);
         //console.group('Marty registrations: ');
         this.registerDependencies();
-        console.log('Now registering hooks.');
+        //console.log('Now registering hooks.');
         this.registerHooks();
-        console.log('Now registering router.');
+        //console.log('Now registering router.');
         this.router = require('./router');
         console.log('Attempting to re auth..');
         this.loginActionCreators.attemptReAuth();

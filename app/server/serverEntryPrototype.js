@@ -4,11 +4,10 @@
     var logger = require('morgan');
     var bodyParser = require('body-parser');
     var configFile = require('../config.json');
-    //var webpack = require('webpack');
-    //var WebpackDevServer = require('webpack-dev-server');
+
     var proxy = require('proxy-middleware');
     var url = require('url');
-    //var webpackConfig = require('../../webpack.config');
+
     var morgan = require('morgan');
     var bodyParser = require('body-parser');
 
@@ -43,23 +42,19 @@
 
 
 
-    app.use(morgan('dev'));
-    app.use(bodyParser.json());
+    //app.use(morgan('dev'));
+    //app.use(bodyParser.json());
     app.use(require('marty-express')({
         routes: require('../routes'),
         application: require('../application'),
         rendered: function (result) {
             console.log('Rendered ' + result.req.url);
         }
-
     }));
 
 
-    //var Application = require('../application');
-    //var appl = new Application();
-    //console.log('Application: '+appl);
     //console.log('Required ejs file: ' + require('./views/index.ejs'));
-    //app.get('/*', function(req, res) {
+    //app.get('/', function(req, res) {
     //    //res.sendFile(__dirname + '/index.html');
     //      res.render('index', {body: 'YO bro', state:'ok'});
     //});
@@ -71,21 +66,19 @@
 
 
 
-
-    //console.log('webpackConfig.output.publicPath: '+webpackConfig.output.publicPath);
-
-
+    //var webpack = require('webpack');
+    //var WebpackDevServer = require('webpack-dev-server');
+    //var webpackConfig = require('../../webpack.browser.config');
     //if(!isProduction){
     //    //----- my-webpack-dev-server------------------
     //    var webpackServer = new WebpackDevServer(webpack(webpackConfig), {
-    //        //contentBase: __dirname,
-    //        hot: false,
+    //        hot: true,
     //        inline: false,
     //        quiet: true,
     //        noInfo: false,
     //        headers: { 'Access-Control-Allow-Origin': '*' },
     //        publicPath: '/assets/',
-    //
+    //        historyApiFallback: false,
     //
     //        stats: { colors: true }
     //    });
