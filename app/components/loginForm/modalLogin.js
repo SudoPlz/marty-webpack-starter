@@ -24,7 +24,7 @@ class ModalLogin extends React.Component {
             <Modal
                 show={this.props.show}
                 onHide={this.props.onHide}
-                backdrop={false}
+                backdrop={'static'}
                 animate={true}
                 >
                 <Modal.Header closeButton>

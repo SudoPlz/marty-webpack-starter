@@ -21,8 +21,7 @@ if (process.env.NODE_ENV !== 'test') {
 //}
 
 app.router.run((Handler, state) => {
-    //app.navigationActionCreators.changeRoute(state, Handler);
-
+    app.navigationActionCreators.changeRoute(state, Handler);
     React.render((
         <ApplicationContainer app={app}>
             <Handler {...state.params} />

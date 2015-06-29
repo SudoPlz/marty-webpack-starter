@@ -32,7 +32,7 @@ class MyNavbar extends React.Component {
         var loggedOutNavBar =
             (<Nav navbar right>
                 <NavItem onClick={this.openLoginModal}>Login</NavItem>
-                <NavItem>Register</NavItem>
+                <NavItemLink to='register' params={{ someparam: 'hello' }}>Register</NavItemLink>
             </Nav>);
         return (
             <div>
