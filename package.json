@@ -32,7 +32,9 @@
     "body-parser":"latest",
     "express":"latest",
     "morgan":"latest",
-    "proxy-middleware":"latest"
+    "proxy-middleware":"latest",
+    "parallelshell":"latest",
+    "ejs-loader":"latest"
   },
   "dependencies": {
     "extract-text-webpack-plugin": "^0.8.0",
@@ -48,7 +50,12 @@
 
   },
   "scripts": {
-    "start": "babel-node bin/www",
+    "start":"nodemon ./bin/serverEntryPoint.js",
+    "lift": "parallelshell 'npm run webpack-node' 'npm run webpack-server-browser'",
+
+    "webpack-server-browser":"./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config ./webpack.browser.config.js --hot --port 8081",
+    "webpack-node":"./node_modules/webpack/bin/webpack.js --config ./webpack.node.config.js --progress --watch",
+
     "lint":"eslint app/ -c .eslintrc",
     "moveJs":"cp node_modules/marty-clipboard/dist/marty-clipboard.js dist/javascripts/",
     "moveCss":"cp node_modules/react-bootstrap-modal/lib/styles/rbm-complete.css app/styles/"

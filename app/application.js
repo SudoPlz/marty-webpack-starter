@@ -20,6 +20,8 @@ class Application extends Marty.Application {
             console.log('Registering marty assets: ', id);
             this.register(id, context(key));
         });
+
+
     }
 
     registerHooks() {
@@ -33,8 +35,7 @@ class Application extends Marty.Application {
 
     constructor(options) {
         super(options);
-        console.group('Marty registrations: ');
-
+        //console.group('Marty registrations: ');
         this.registerDependencies();
         console.log('Now registering hooks.');
         this.registerHooks();
@@ -42,7 +43,7 @@ class Application extends Marty.Application {
         this.router = require('./router');
         console.log('Attempting to re auth..');
         this.loginActionCreators.attemptReAuth();
-        console.groupEnd();
+        //console.groupEnd();
     }
 }
 
