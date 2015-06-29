@@ -46,13 +46,13 @@
     "react-router": "^0.13.3",
     "react-router-bootstrap":"latest",
     "react-bootstrap": "^0.22.3",
-    "react-bootstrap-modal":"latest"
+    "react-bootstrap-modal":"latest",
+    "serve-favicon":"latest"
 
   },
   "scripts": {
-    "start":"nodemon ./bin/serverEntryPoint.js",
-    "lift": "parallelshell 'npm run webpack-node' 'npm run webpack-server-browser'",
-
+    "start": "parallelshell 'npm run webpack-node' 'npm run webpack-server-browser' 'npm run nodemon'",
+    "nodemon":"sleep 11;nodemon bin/serverEntryPoint.js",
     "webpack-server-browser":"./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config ./webpack.browser.config.js --hot --port 8081",
     "webpack-node":"./node_modules/webpack/bin/webpack.js --config ./webpack.node.config.js --progress --watch",
 

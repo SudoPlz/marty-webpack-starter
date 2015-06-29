@@ -4,12 +4,11 @@
     var logger = require('morgan');
     var bodyParser = require('body-parser');
     var configFile = require('../config.json');
-
     var proxy = require('proxy-middleware');
     var url = require('url');
-
     var morgan = require('morgan');
     var bodyParser = require('body-parser');
+    var favicon = require('serve-favicon');
 
     var isProduction = process.env.NODE_ENV === 'production';
     //var publicPath = path.join(__dirname, '..','..', 'assets');
@@ -20,6 +19,9 @@
 
     // now requests to '/assets' are proxied to 'http://localhost:8081/assets'
     app.use('/assets', proxy(url.parse('http://localhost:8081/assets')));
+
+
+    app.use(favicon(path.join('assets', 'favicon.ico')));
 
 
 

@@ -28,7 +28,7 @@ class Application extends Marty.Application {
         let context = require.context('./', true, /hooks/);
 
         requireFromContext(context, key => {
-            console.log('registering hook', key);
+            //console.log('registering hook', key);
             context(key); // Run
         });
     }
@@ -41,7 +41,7 @@ class Application extends Marty.Application {
         this.registerHooks();
         //console.log('Now registering router.');
         this.router = require('./router');
-        console.log('Attempting to re auth..');
+        console.log('Attempting to re auth.');
         this.loginActionCreators.attemptReAuth();
         //console.groupEnd();
     }
