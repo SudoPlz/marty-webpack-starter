@@ -90,7 +90,7 @@
 	//app.use(bodyParser.json());
 	app.use(__webpack_require__(9)({
 	    routes: __webpack_require__(10),
-	    application: __webpack_require__(36),
+	    application: __webpack_require__(37),
 	    rendered: function rendered(result) {
 	        console.log('Rendered ' + result.req.url);
 	    }
@@ -1847,27 +1847,267 @@
 
 	var _marty2 = _interopRequireDefault(_marty);
 
+	var _validator = __webpack_require__(36);
+
+	var _validator2 = _interopRequireDefault(_validator);
+
+	var FIELD_KEYS = {
+	    USERNAME: 0,
+	    PASSWORD: 1,
+	    PASSWORD_CONF: 2,
+	    EMAIL: 3,
+	    FIRST_NAME: 4,
+	    LAST_NAME: 5
+	};
+	var TOTAL_SIGNUP_FIELDS = 6;
+
 	var Register = (function (_React$Component) {
-	    function Register() {
+	    function Register(props) {
 	        _classCallCheck(this, Register);
 
-	        _get(Object.getPrototypeOf(Register.prototype), 'constructor', this).apply(this, arguments);
+	        _get(Object.getPrototypeOf(Register.prototype), 'constructor', this).call(this, props);
+	        //this.state.errorTxt = '';
+
+	        this.state = {
+	            isLoading: false,
+	            fieldErrors: [],
+	            submitBtnDisabled: true,
+	            resetBtnDisabled: false,
+	            curUsernameUsed: '',
+	            curPasswordUsed: '',
+	            noInputYet: true
+
+	        };
 	    }
 
 	    _inherits(Register, _React$Component);
 
 	    _createClass(Register, [{
+	        key: 'handleResetForms',
+	        value: function handleResetForms() {
+	            this.setState({
+	                curUsernameUsed: '',
+	                curPasswordUsed: '',
+	                noInputYet: true,
+	                fieldErrors: []
+	            });
+	        }
+	    }, {
+	        key: 'handleSubmit',
+	        value: function handleSubmit(e) {
+
+	            e.preventDefault();
+	            var newUserInfo = {
+	                email: this.refs.email.getValue(),
+	                username: this.refs.username.getValue(),
+	                password: this.refs.password.getValue(),
+	                firstName: this.refs.firstName.getValue(),
+	                lastName: this.refs.lastName.getValue()
+	            };
+
+	            if (this.allFieldsAccepted()) {
+	                this.setState({
+	                    isLoading: true,
+	                    submitBtnDisabled: true,
+	                    resetBtnDisabled: true,
+	                    //errorTxt:'',
+	                    curUsernameUsed: '',
+	                    curPasswordUsed: '',
+	                    noInputYet: true
+	                });
+	                //TODO: We should log in here
+	                //SessionActionCreators.signup(newUserInfo.email, newUserInfo.username, newUserInfo.password, newUserInfo.firstName, newUserInfo.lastName);
+	            }
+	        }
+	    }, {
+	        key: 'handleUsernameChange',
+	        value: function handleUsernameChange(event) {
+	            this.state.curUsernameUsed = event.target.value;
+	            var erMsg = '';
+	            if (!this.passesOurCharWhitelist(this.state.curUsernameUsed)) {
+	                erMsg = 'Allowed username characters are a-z, A-Z, 0-9, and !@#%&?+*^~-_.,().';
+	            }
+	            if (!_validator2['default'].isLength(this.state.curUsernameUsed, 6, 32)) {
+	                erMsg = 'Username length should be 6-32 characters';
+	            }
+	            this.updateField(FIELD_KEYS.USERNAME, erMsg);
+	        }
+	    }, {
+	        key: 'handlePasswordChange',
+	        value: function handlePasswordChange(event) {
+	            this.state.curPasswordUsed = event.target.value;
+	            var erMsg = '';
+	            if (!this.passesOurCharWhitelist(this.state.curPasswordUsed)) {
+	                erMsg = 'Allowed password characters are a-z, A-Z, 0-9, and !@#%&?+*^~-_.,().';
+	            }
+	            if (!_validator2['default'].isLength(this.state.curPasswordUsed, 6, 32)) {
+	                erMsg = 'Password length should be 6-32 characters';
+	            }
+	            if (this.state.curUsernameUsed == this.state.curPasswordUsed) {
+	                erMsg = 'Username and password CANNOT be the same. Choose a different password please.';
+	            }
+	            this.updateField(FIELD_KEYS.PASSWORD, erMsg);
+	        }
+	    }, {
+	        key: 'handlePasswordConfrimationChange',
+	        value: function handlePasswordConfrimationChange(event) {
+	            var curPassConf = event.target.value;
+	            var erMsg = '';
+	            if (this.state.curPasswordUsed != curPassConf) {
+	                erMsg = 'Password and password confirmation don\'t match';
+	            }
+	            this.updateField(FIELD_KEYS.PASSWORD_CONF, erMsg);
+	        }
+	    }, {
+	        key: 'handleEmailChange',
+	        value: function handleEmailChange(event) {
+	            var curEmail = event.target.value;
+	            var erMsg = '';
+	            if (!_validator2['default'].isEmail(curEmail) || !_validator2['default'].isLength(curEmail, 6, 64)) {
+	                erMsg = 'Please provide us with a valid email 6-64 characters long.';
+	            }
+	            this.updateField(FIELD_KEYS.EMAIL, erMsg);
+	        }
+	    }, {
+	        key: 'updateField',
+	        value: function updateField(fieldName, errMessage) {
+	            var fErs = this.state.fieldErrors;
+	            fErs[fieldName] = errMessage;
+	            this.setState({ fieldErrors: fErs, errors: '', submitBtnDisabled: !this.allFieldsAccepted(), noInputYet: false });
+	        }
+	    }, {
+	        key: 'handleFirstNameChange',
+	        value: function handleFirstNameChange(event) {
+
+	            var curFirstName = event.target.value;
+	            var erMsg = '';
+	            if (!_validator2['default'].isLength(curFirstName, 2, 60)) {
+	                erMsg = 'Please provide your real first name 2-60 characters long.';
+	            }
+	            this.updateField(FIELD_KEYS.FIRST_NAME, erMsg);
+	        }
+	    }, {
+	        key: 'handleLastNameChange',
+	        value: function handleLastNameChange(event) {
+	            var curLastName = event.target.value;
+	            var erMsg = '';
+	            if (!_validator2['default'].isLength(curLastName, 3, 60)) {
+	                erMsg = 'Please provide your real last name 3-60 characters long.';
+	            }
+	            this.updateField(FIELD_KEYS.LAST_NAME, erMsg);
+	        }
+	    }, {
+	        key: 'passesOurCharWhitelist',
+	        value: function passesOurCharWhitelist(str) {
+	            return str.match(new RegExp(/(^[\w!@#%&\/(){}[\]=?+*^~\-_.:,]{1,32}$)/));
+	        }
+	    }, {
+	        key: 'allFieldsAccepted',
+	        value: function allFieldsAccepted() {
+	            var i, len, field;
+	            var accepted = true;
+	            var arr = this.state.fieldErrors;
+	            len = arr.length;
+	            var keys = Object.keys(arr);
+	            //console.log('Arr status: '+arr+ ' with length: '+len);
+	            //console.log('Total fields: '+len);
+	            if (len < TOTAL_SIGNUP_FIELDS) {
+	                accepted = false;
+	            } else {
+	                for (i = 0; i < len; ++i) {
+	                    if (i in arr) {
+	                        field = arr[i];
+	                        if (field != '') {
+	                            accepted = false;
+	                        }
+	                    }
+	                }
+	            }
+	            //console.log(accepted?'All fields OK':'Some fields need work');
+	            return accepted;
+	        }
+	    }, {
+	        key: 'getAppropriateStyle',
+	        value: function getAppropriateStyle(fieldKey) {
+	            var style = null;
+	            //console.log('fielderrors for key: '+fieldKey+' is: '+this.state.fieldErrors[fieldKey]);
+	            if (this.state.fieldErrors[fieldKey] != undefined) {
+	                if (this.state.fieldErrors[fieldKey] == '') {
+	                    style = 'success';
+	                } else {
+	                    style = 'error';
+	                }
+	            }
+	            //console.log('getAppropriateStyle style: '+style);
+	            return style;
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            //bsStyle='success'     warning     error
 	            return _react2['default'].createElement(
-	                'div',
+	                'form',
 	                { className: 'register' },
 	                _react2['default'].createElement(
-	                    _reactBootstrap.PageHeader,
-	                    null,
-	                    'Register page! this is the reg page.'
+	                    _reactBootstrap.Row,
+	                    { className: 'nameinputs' },
+	                    _react2['default'].createElement(
+	                        _reactBootstrap.Col,
+	                        { xs: 5 },
+	                        _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', placeholder: 'First name',
+	                            label: 'First name', ref: 'firstName',
+	                            onChange: this.handleFirstNameChange.bind(this),
+	                            bsStyle: this.getAppropriateStyle(FIELD_KEYS.FIRST_NAME),
+	                            help: this.state.fieldErrors[FIELD_KEYS.FIRST_NAME], hasFeedback: !this.state.noInputYet })
+	                    ),
+	                    _react2['default'].createElement(
+	                        _reactBootstrap.Col,
+	                        { xs: 7 },
+	                        _react2['default'].createElement(_reactBootstrap.Input, { type: 'text', placeholder: 'Last name',
+	                            label: 'Last name', ref: 'lastName',
+	                            onChange: this.handleLastNameChange.bind(this),
+	                            bsStyle: this.getAppropriateStyle(FIELD_KEYS.LAST_NAME),
+	                            help: this.state.fieldErrors[FIELD_KEYS.LAST_NAME], hasFeedback: !this.state.noInputYet })
+	                    )
+	                ),
+	                _react2['default'].createElement(_reactBootstrap.Input, { className: 'emailInput', type: 'email', label: 'Email Address', placeholder: 'Enter email', ref: 'email',
+	                    onChange: this.handleEmailChange.bind(this),
+	                    bsStyle: this.getAppropriateStyle(FIELD_KEYS.EMAIL),
+	                    help: this.state.fieldErrors[FIELD_KEYS.EMAIL], hasFeedback: !this.state.noInputYet }),
+	                _react2['default'].createElement(_reactBootstrap.Input, { className: 'usernameInput', type: 'text', label: 'Username', placeholder: 'Enter your username', ref: 'username',
+	                    onChange: this.handleUsernameChange.bind(this),
+	                    bsStyle: this.getAppropriateStyle(FIELD_KEYS.USERNAME),
+	                    help: this.state.fieldErrors[FIELD_KEYS.USERNAME], hasFeedback: !this.state.noInputYet }),
+	                _react2['default'].createElement(_reactBootstrap.Input, { className: 'passwordInput', type: 'password', label: 'Password', placeholder: 'Enter a password', ref: 'password',
+	                    onChange: this.handlePasswordChange.bind(this),
+	                    bsStyle: this.getAppropriateStyle(FIELD_KEYS.PASSWORD),
+	                    help: this.state.fieldErrors[FIELD_KEYS.PASSWORD], hasFeedback: !this.state.noInputYet }),
+	                _react2['default'].createElement(_reactBootstrap.Input, { className: 'passwordConfInput', type: 'password', label: 'Confirmation Password', placeholder: 'Re enter your password',
+	                    onChange: this.handlePasswordConfrimationChange.bind(this),
+	                    bsStyle: this.getAppropriateStyle(FIELD_KEYS.PASSWORD_CONF),
+	                    help: this.state.fieldErrors[FIELD_KEYS.PASSWORD_CONF], hasFeedback: !this.state.noInputYet }),
+	                _react2['default'].createElement(
+	                    _reactBootstrap.Button,
+	                    { type: 'submit', className: 'submitButton', onClick: this.handleSubmit.bind(this), disabled: this.state.submitBtnDisabled, bsStyle: 'success' },
+	                    this.state.isLoading ? _react2['default'].createElement(
+	                        'div',
+	                        null,
+	                        _react2['default'].createElement('span', { className: 'glyphicon glyphicon-refresh spinning' }),
+	                        ' Loading...'
+	                    ) : 'Submit'
+	                ),
+	                _react2['default'].createElement(
+	                    _reactBootstrap.ButtonInput,
+	                    { type: 'reset', className: 'resetButton', bsStyle: 'link', onClick: this.handleResetForms.bind(this), disabled: this.state.resetBtnDisabled },
+	                    'Reset'
 	                )
 	            );
+	            //<Glyphicon glyph='refresh' />
+	            //
+
+	            //<ButtonToolbar>
+	            //    <Button onClick={this.handleResetForms.bind(this)} bsStyle='link' pullRight>Reset forms</Button>
+	            //</ButtonToolbar>
 	        }
 	    }]);
 
@@ -1883,6 +2123,12 @@
 
 /***/ },
 /* 36 */
+/***/ function(module, exports) {
+
+	module.exports = require("validator");
+
+/***/ },
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -1922,7 +2168,7 @@
 	        //console.log('Now registering hooks.');
 	        this.registerHooks();
 	        //console.log('Now registering router.');
-	        this.router = __webpack_require__(37);
+	        this.router = __webpack_require__(38);
 	        console.log('Attempting to re auth.');
 	        this.loginActionCreators.attemptReAuth();
 	        //console.groupEnd();
@@ -1935,7 +2181,7 @@
 	        value: function registerDependencies() {
 	            var _this = this;
 
-	            var context = __webpack_require__(38);
+	            var context = __webpack_require__(39);
 
 	            requireFromContext(context, function (key) {
 	                // NOTE: id could potentially clash if files are named the same.
@@ -1947,7 +2193,7 @@
 	    }, {
 	        key: 'registerHooks',
 	        value: function registerHooks() {
-	            var context = __webpack_require__(50);
+	            var context = __webpack_require__(51);
 
 	            requireFromContext(context, function (key) {
 	                //console.log('registering hook', key);
@@ -1964,7 +2210,7 @@
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "application.js" + ": " + err.message); } }); } } })(); }
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -2001,24 +2247,24 @@
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "router.js" + ": " + err.message); } }); } } })(); }
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./actions/loginActionCreators": 39,
-		"./actions/loginActionCreators.js": 39,
-		"./actions/navigationActionCreators": 44,
-		"./actions/navigationActionCreators.js": 44,
-		"./queries/loginQueries": 46,
-		"./queries/loginQueries.js": 46,
-		"./sources/localStorage": 47,
-		"./sources/localStorage.js": 47,
-		"./sources/session": 48,
-		"./sources/session.js": 48,
-		"./sources/usersApi": 42,
-		"./sources/usersApi.js": 42,
-		"./stores/loginStore": 49,
-		"./stores/loginStore.js": 49
+		"./actions/loginActionCreators": 40,
+		"./actions/loginActionCreators.js": 40,
+		"./actions/navigationActionCreators": 45,
+		"./actions/navigationActionCreators.js": 45,
+		"./queries/loginQueries": 47,
+		"./queries/loginQueries.js": 47,
+		"./sources/localStorage": 48,
+		"./sources/localStorage.js": 48,
+		"./sources/session": 49,
+		"./sources/session.js": 49,
+		"./sources/usersApi": 43,
+		"./sources/usersApi.js": 43,
+		"./stores/loginStore": 50,
+		"./stores/loginStore.js": 50
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -2031,11 +2277,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 38;
+	webpackContext.id = 39;
 
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -2056,7 +2302,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _lodash = __webpack_require__(40);
+	var _lodash = __webpack_require__(41);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -2064,11 +2310,11 @@
 
 	var _marty2 = _interopRequireDefault(_marty);
 
-	var _constantsLoginConstants = __webpack_require__(41);
+	var _constantsLoginConstants = __webpack_require__(42);
 
 	var _constantsLoginConstants2 = _interopRequireDefault(_constantsLoginConstants);
 
-	var _sourcesUsersApi = __webpack_require__(42);
+	var _sourcesUsersApi = __webpack_require__(43);
 
 	var _sourcesUsersApi2 = _interopRequireDefault(_sourcesUsersApi);
 
@@ -2139,13 +2385,13 @@
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "loginActionCreators.js" + ": " + err.message); } }); } } })(); }
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = require("lodash");
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -2168,7 +2414,7 @@
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "loginConstants.js" + ": " + err.message); } }); } } })(); }
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -2193,7 +2439,7 @@
 
 	var _marty2 = _interopRequireDefault(_marty);
 
-	var _util = __webpack_require__(43);
+	var _util = __webpack_require__(44);
 
 	var _configJson = __webpack_require__(4);
 
@@ -2245,13 +2491,13 @@
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "usersApi.js" + ": " + err.message); } }); } } })(); }
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports) {
 
 	module.exports = require("util");
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -2276,7 +2522,7 @@
 
 	var _marty2 = _interopRequireDefault(_marty);
 
-	var _constantsNavigationConstants = __webpack_require__(45);
+	var _constantsNavigationConstants = __webpack_require__(46);
 
 	var _constantsNavigationConstants2 = _interopRequireDefault(_constantsNavigationConstants);
 
@@ -2292,19 +2538,19 @@
 	    _createClass(NavigationActionCreators, [{
 	        key: 'navigateHome',
 	        value: function navigateHome() {
-	            console.log(' navigateHome !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+	            //console.log(' navigateHome !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 	            this.navigateTo('home');
 	        }
 	    }, {
 	        key: 'navigateToLogin',
 	        value: function navigateToLogin() {
-	            console.log(' navigateToLogin !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+	            //console.log(' navigateToLogin !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 	            this.navigateTo('login');
 	        }
 	    }, {
 	        key: 'changeRoute',
 	        value: function changeRoute(state) {
-	            console.log(' changeRoute !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ' + JSON.stringify(state));
+	            //console.log(' changeRoute !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '+JSON.stringify(state));
 	            this.dispatch(_constantsNavigationConstants2['default'].CHANGE_ROUTE, state);
 
 	            if (state.path === '/logout') {
@@ -2316,8 +2562,7 @@
 	        value: function navigateTo(route) {
 	            var params = arguments[1] === undefined ? {} : arguments[1];
 
-	            console.log(' navigateTo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-	            console.log('navigate to', route, params);
+	            //console.log('navigate to', route, params);
 	            this.app.router.transitionTo(route, params);
 	        }
 	    }]);
@@ -2331,7 +2576,7 @@
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "navigationActionCreators.js" + ": " + err.message); } }); } } })(); }
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -2354,7 +2599,7 @@
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "navigationConstants.js" + ": " + err.message); } }); } } })(); }
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -2379,7 +2624,7 @@
 
 	var _marty2 = _interopRequireDefault(_marty);
 
-	var _constantsLoginConstants = __webpack_require__(41);
+	var _constantsLoginConstants = __webpack_require__(42);
 
 	var _constantsLoginConstants2 = _interopRequireDefault(_constantsLoginConstants);
 
@@ -2424,7 +2669,7 @@
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "loginQueries.js" + ": " + err.message); } }); } } })(); }
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -2489,7 +2734,7 @@
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "localStorage.js" + ": " + err.message); } }); } } })(); }
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -2554,7 +2799,7 @@
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "session.js" + ": " + err.message); } }); } } })(); }
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -2575,7 +2820,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _lodash = __webpack_require__(40);
+	var _lodash = __webpack_require__(41);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -2583,7 +2828,7 @@
 
 	var _marty2 = _interopRequireDefault(_marty);
 
-	var _constantsLoginConstants = __webpack_require__(41);
+	var _constantsLoginConstants = __webpack_require__(42);
 
 	var _constantsLoginConstants2 = _interopRequireDefault(_constantsLoginConstants);
 
@@ -2697,12 +2942,12 @@
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "loginStore.js" + ": " + err.message); } }); } } })(); }
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./hooks/httpHooks": 51,
-		"./hooks/httpHooks.js": 51
+		"./hooks/httpHooks": 52,
+		"./hooks/httpHooks.js": 52
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -2715,11 +2960,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 50;
+	webpackContext.id = 51;
 
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } (function () {
@@ -2732,7 +2977,7 @@
 
 	var _marty2 = _interopRequireDefault(_marty);
 
-	var _storesLoginStore = __webpack_require__(49);
+	var _storesLoginStore = __webpack_require__(50);
 
 	var _storesLoginStore2 = _interopRequireDefault(_storesLoginStore);
 

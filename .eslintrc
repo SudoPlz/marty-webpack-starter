@@ -17,7 +17,7 @@
         "octalLiterals": false,                     // enable octal literals
         "regexUFlag": false,                        // enable the regular expression u flag
         "regexYFlag": false,                        // enable the regular expression y flag
-        "templateStrings": false,                   // enable template strings
+        "templateStrings": true,                   // enable template strings
         "unicodeCodePointEscapes": false,           // enable code point escapes
         "destructuring": true,
         "jsx": true,                                // enable JSX

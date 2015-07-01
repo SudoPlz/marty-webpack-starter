@@ -3,16 +3,16 @@ import NavigationConstants from '../constants/navigationConstants';
 
 class NavigationActionCreators extends Marty.ActionCreators {
     navigateHome() {
-        console.log(' navigateHome !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        //console.log(' navigateHome !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         this.navigateTo('home');
     }
     navigateToLogin() {
-        console.log(' navigateToLogin !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        //console.log(' navigateToLogin !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         this.navigateTo('login');
     }
 
     changeRoute(state) {
-        console.log(' changeRoute !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '+JSON.stringify(state));
+        //console.log(' changeRoute !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '+JSON.stringify(state));
         this.dispatch(NavigationConstants.CHANGE_ROUTE, state);
 
         if (state.path === '/logout') {
@@ -21,8 +21,7 @@ class NavigationActionCreators extends Marty.ActionCreators {
     }
 
     navigateTo(route, params={}) {
-        console.log(' navigateTo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        console.log('navigate to', route, params);
+        //console.log('navigate to', route, params);
         this.app.router.transitionTo(route, params);
     }
 }

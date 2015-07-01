@@ -47,7 +47,8 @@
     "react-router-bootstrap":"latest",
     "react-bootstrap": "^0.22.3",
     "react-bootstrap-modal":"latest",
-    "serve-favicon":"latest"
+    "serve-favicon":"latest",
+    "validator":"latest"
 
   },
   "scripts": {
