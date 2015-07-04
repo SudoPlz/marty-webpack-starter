@@ -1,7 +1,7 @@
 {
   "APP_NAME": "Marty webpack",
   "API": {
-    "ROOT": "http://my-api/",
+    "ROOT": "http://localhost:1337",
     "AUTH_SCHEME": "my-auth-scheme"
   },
   "DEV_PORT":8080

@@ -11,6 +11,11 @@ class NavigationActionCreators extends Marty.ActionCreators {
         this.navigateTo('login');
     }
 
+    navigateToVerify() {
+        //console.log(' navigateToLogin !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        this.navigateTo('home');
+    }
+
     changeRoute(state) {
         //console.log(' changeRoute !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '+JSON.stringify(state));
         this.dispatch(NavigationConstants.CHANGE_ROUTE, state);

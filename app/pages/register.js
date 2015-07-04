@@ -1,5 +1,5 @@
 import React from 'react'
-import {Input,Row,Col, ButtonInput, Glyphicon, Button} from 'react-bootstrap';
+import {Input,Row,Col, ButtonInput, Glyphicon, Button, Panel, Alert} from 'react-bootstrap';
 import Marty from 'marty';
 import validator from 'validator';
 
@@ -35,6 +35,18 @@ class Register extends React.Component {
 
     }
 
+    componentDidUpdate(prevProps, prevState){
+        if(this.state.isLoading)
+        {
+            if((!prevProps.error && this.props.error) ){
+                this.setState({isLoading:false, submitBtnDisabled:!(this.allFieldsAccepted()), resetBtnDisabled:false});
+            }
+            if(this.props.error && (prevProps.error==this.props.error)){
+                this.setState({isLoading:false, submitBtnDisabled:!(this.allFieldsAccepted()), resetBtnDisabled:false});
+            }
+        }
+    }
+
     handleResetForms(){
         this.setState({
             curUsernameUsed:'',
@@ -47,7 +59,7 @@ class Register extends React.Component {
     handleSubmit(e) {
 
         e.preventDefault();
-        var newUserInfo = {
+        var payload = {
             email:this.refs.email.getValue(),
             username:this.refs.username.getValue(),
             password: this.refs.password.getValue(),
@@ -55,6 +67,7 @@ class Register extends React.Component {
             lastName : this.refs.lastName.getValue()
         };
 
+        this.app.registerStore.clearErrors();
 
         if(this.allFieldsAccepted()){
             this.setState({
@@ -66,8 +79,8 @@ class Register extends React.Component {
                 curPasswordUsed:'',
                 noInputYet:true
             });
-            //TODO: We should log in here
-            //SessionActionCreators.signup(newUserInfo.email, newUserInfo.username, newUserInfo.password, newUserInfo.firstName, newUserInfo.lastName);
+
+            this.app.registerActionCreators.attemptRegister(payload);
         }
     }
 
@@ -187,8 +200,11 @@ class Register extends React.Component {
     render(){
         //bsStyle='success'     warning     error
         return (
+            <Panel header='Lets get you up and running:'  bsStyle='success' className='register' >
+                <div className='registerErrorLbl' >{this.props.error?<Alert bsStyle='danger'>
+                    <strong>{this.props.error}</strong>
+                </Alert>:''}</div>
 
-            <form className='register' >
                 <Row className='nameinputs'>
                     <Col xs={5}>
                         <Input type='text' placeholder='First name'
@@ -225,7 +241,7 @@ class Register extends React.Component {
                     {this.state.isLoading ? <div><span className="glyphicon glyphicon-refresh spinning"></span> Loading...</div>: 'Submit'}
                 </Button>
                 <ButtonInput type="reset" className='resetButton' bsStyle="link" onClick={this.handleResetForms.bind(this)} disabled={this.state.resetBtnDisabled} >Reset</ButtonInput>
-            </form>
+            </Panel>
         );
         //<Glyphicon glyph='refresh' />
         //
@@ -240,4 +256,11 @@ Register.propTypes = {
 
 };
 
-export default Register;
+export default Marty.createContainer(Register, {
+    listenTo: ['registerStore'],
+    fetch: {
+        error() {
+            return this.app.registerStore.getError();
+        }
+    }
+});
