@@ -2,8 +2,8 @@
 var React = require('react');
 var {PageHeader} = require('react-bootstrap');
 
-var About = React.createClass({
-	displayName: 'About Component',
+var AboutPage = React.createClass({
+	displayName: 'AboutPage Component',
 	render: function () {
 		return (
 		  <div className='about'>
@@ -13,4 +13,4 @@ var About = React.createClass({
 	}
 });
 
-module.exports = About;
+module.exports = AboutPage;

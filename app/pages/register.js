@@ -14,7 +14,7 @@ const FIELD_KEYS = {
 };
 const TOTAL_SIGNUP_FIELDS = 6;
 
-class Register extends React.Component {
+class RegisterPage extends React.Component {
 
 
 
@@ -252,11 +252,11 @@ class Register extends React.Component {
     }
 }
 
-Register.propTypes = {
+RegisterPage.propTypes = {
 
 };
 
-export default Marty.createContainer(Register, {
+export default Marty.createContainer(RegisterPage, {
     listenTo: ['registerStore'],
     fetch: {
         error() {

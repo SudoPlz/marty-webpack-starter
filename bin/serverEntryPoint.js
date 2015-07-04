@@ -1846,8 +1846,8 @@
 
 	var PageHeader = _require.PageHeader;
 
-	var About = React.createClass({
-		displayName: 'About Component',
+	var AboutPage = React.createClass({
+		displayName: 'AboutPage Component',
 		render: function render() {
 			return React.createElement(
 				'div',
@@ -1861,7 +1861,7 @@
 		}
 	});
 
-	module.exports = About;
+	module.exports = AboutPage;
 
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "about.js" + ": " + err.message); } }); } } })(); }
 
@@ -1874,8 +1874,8 @@
 	'use strict';
 	var React = __webpack_require__(13);
 
-	var PageNotFound = React.createClass({
-		displayName: 'PageNotFound Component',
+	var NotFoundPage = React.createClass({
+		displayName: 'NotFoundPage Component',
 		render: function render() {
 			return React.createElement(
 				'div',
@@ -1889,7 +1889,7 @@
 		}
 	});
 
-	module.exports = PageNotFound;
+	module.exports = NotFoundPage;
 
 	/* REACT HOT LOADER */ }).call(this); if (false) { (function () { module.hot.dispose(function (data) { data.makeHot = module.makeHot; }); if (module.exports && module.makeHot) { var makeExportsHot = require("/Users/Dynopia/Development/DS_Stalker_Frontend/node_modules/react-hot-loader/makeExportsHot.js"), foundReactClasses = false; if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "notfound.js" + ": " + err.message); } }); } } })(); }
 
@@ -1939,11 +1939,11 @@
 	};
 	var TOTAL_SIGNUP_FIELDS = 6;
 
-	var Register = (function (_React$Component) {
-	    function Register(props) {
-	        _classCallCheck(this, Register);
+	var RegisterPage = (function (_React$Component) {
+	    function RegisterPage(props) {
+	        _classCallCheck(this, RegisterPage);
 
-	        _get(Object.getPrototypeOf(Register.prototype), 'constructor', this).call(this, props);
+	        _get(Object.getPrototypeOf(RegisterPage.prototype), 'constructor', this).call(this, props);
 	        //this.state.errorTxt = '';
 
 	        this.state = {
@@ -1958,9 +1958,9 @@
 	        };
 	    }
 
-	    _inherits(Register, _React$Component);
+	    _inherits(RegisterPage, _React$Component);
 
-	    _createClass(Register, [{
+	    _createClass(RegisterPage, [{
 	        key: 'componentDidUpdate',
 	        value: function componentDidUpdate(prevProps, prevState) {
 	            if (this.state.isLoading) {
@@ -2216,12 +2216,12 @@
 	        }
 	    }]);
 
-	    return Register;
+	    return RegisterPage;
 	})(_react2['default'].Component);
 
-	Register.propTypes = {};
+	RegisterPage.propTypes = {};
 
-	exports['default'] = _marty2['default'].createContainer(Register, {
+	exports['default'] = _marty2['default'].createContainer(RegisterPage, {
 	    listenTo: ['registerStore'],
 	    fetch: {
 	        error: function error() {

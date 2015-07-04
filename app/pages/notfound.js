@@ -1,8 +1,8 @@
 'use strict';
 var React = require('react');
 
-var PageNotFound = React.createClass({
-	displayName: 'PageNotFound Component',
+var NotFoundPage = React.createClass({
+	displayName: 'NotFoundPage Component',
 	render: function () {
 		return (
 		<div className='NotFound'>
@@ -12,4 +12,4 @@ var PageNotFound = React.createClass({
 	}
 });
 
-module.exports = PageNotFound;
+module.exports = NotFoundPage;
