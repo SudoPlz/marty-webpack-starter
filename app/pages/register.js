@@ -18,8 +18,8 @@ class RegisterPage extends React.Component {
 
 
 
-    constructor(props){
-        super(props);
+    constructor(props, context){
+        super(props, context);
         //this.state.errorTxt = '';
 
         this.state = {
@@ -30,7 +30,6 @@ class RegisterPage extends React.Component {
             curUsernameUsed:'',
             curPasswordUsed:'',
             noInputYet:true
-
         };
 
     }
@@ -67,7 +66,7 @@ class RegisterPage extends React.Component {
             lastName : this.refs.lastName.getValue()
         };
 
-        this.app.registerStore.clearErrors();
+        this.app.registerStore.clearRegistErrors();
 
         if(this.allFieldsAccepted()){
             this.setState({
@@ -198,7 +197,7 @@ class RegisterPage extends React.Component {
     }
 
     render(){
-        //bsStyle='success'     warning     error
+
         return (
             <Panel header='Lets get you up and running:'  bsStyle='success' className='register' >
                 <div className='registerErrorLbl' >{this.props.error?<Alert bsStyle='danger'>
@@ -243,12 +242,19 @@ class RegisterPage extends React.Component {
                 <ButtonInput type="reset" className='resetButton' bsStyle="link" onClick={this.handleResetForms.bind(this)} disabled={this.state.resetBtnDisabled} >Reset</ButtonInput>
             </Panel>
         );
-        //<Glyphicon glyph='refresh' />
-        //
 
-        //<ButtonToolbar>
-        //    <Button onClick={this.handleResetForms.bind(this)} bsStyle='link' pullRight>Reset forms</Button>
-        //</ButtonToolbar>
+        //if(this.props.registSuccess){
+        //    return (
+        //        <Panel header='Lets get you up and running:'  bsStyle='success' className='register' >
+        //            <h1>Thank you for signing up.</h1>
+        //            <br/>
+        //            <p>Check your mailbox for a verification mail.</p>
+        //        </Panel>
+        //    );
+        //}
+        //else{
+        //}
+
     }
 }
 
@@ -260,7 +266,12 @@ export default Marty.createContainer(RegisterPage, {
     listenTo: ['registerStore'],
     fetch: {
         error() {
-            return this.app.registerStore.getError();
+            return this.app.registerStore.getRegistError();
         }
+        //,
+        //registSuccess() {
+        //    return this.app.registerStore.didRegistrationSucceed();
+        //}
     }
+
 });

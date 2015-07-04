@@ -84,6 +84,27 @@ class UserHttpAPI extends Marty.HttpStateSource {
             .end(next);
     }
 
+    resendMail(username, next){
+        var url = format(endpoint + '/reconfirm');
+        return httpRequest.post(url)
+            .send({
+                username: username
+            })
+            .set('Accept', 'application/json')
+            .end(next);
+    }
+
+    verifyMail(username, verificationId, next){
+        var url = format(endpoint + '/signup/verify');
+        return httpRequest.post(url)
+            .send({
+                username: username
+                ,verificationId: verificationId
+            })
+            .set('Accept', 'application/json')
+            .end(next);
+    }
+
 
     //
     //

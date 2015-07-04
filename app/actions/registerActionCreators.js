@@ -16,6 +16,14 @@ class RegisterActionCreator extends Marty.ActionCreators {
         this.dispatch(RegisterConstants.REGISTER_NEW_USER, payLoad);
     }
 
+    reconfirmMail(username) {
+        this.dispatch(RegisterConstants.RESEND_CONFIRM_MAIL, username);
+    }
+
+    verifyMailAddressById(username, verId){
+        this.dispatch(RegisterConstants.VERIFY_MAIL_ADDRESS, username, verId);
+    }
+
 }
 
 export default RegisterActionCreator;

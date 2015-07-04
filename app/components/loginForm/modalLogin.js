@@ -94,7 +94,7 @@ class ModalLogin extends React.Component {
     }
 
     onDismiss(e){
-        this.app.loginStore.clearErrors();
+        this.app.loginStore.clearRegistErrors();
         this.props.onHide();
     }
 }

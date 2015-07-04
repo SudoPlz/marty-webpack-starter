@@ -49,13 +49,14 @@
     "react-bootstrap-modal":"latest",
     "serve-favicon":"latest",
     "validator":"latest",
-    "superagent":"latest"
+    "superagent":"latest",
+    "react-loader":"latest"
 
   },
   "scripts": {
     "debugMode":"parallelshell 'npm run webpack-node' 'npm run webpack-server-browser'",
     "start": "parallelshell 'npm run webpack-node' 'npm run webpack-server-browser' 'npm run nodemon'",
-    "nodemon":"sleep 11;nodemon bin/serverEntryPoint.js",
+    "nodemon":"sleep 13;nodemon bin/serverEntryPoint.js",
     "webpack-server-browser":"./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config ./webpack.browser.config.js --hot --port 8081",
     "webpack-node":"./node_modules/webpack/bin/webpack.js --config ./webpack.node.config.js --progress --watch",
 

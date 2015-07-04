@@ -8,6 +8,7 @@ import Home from './pages/home';
 import About from './pages/about';
 import NotFound from './pages/notfound';
 import Register from './pages/register';
+import Verify from './pages/verify.js';
 
 export default (
     <Route name="public" path="/" handler={Layout} >
@@ -16,6 +17,7 @@ export default (
         <Route name="home" path="/" handler={Home} />
         <Route name="about" path="/about" handler={About} />
         <Route name="register" path="/register" handler={Register} />
+        <Route name="verify" path="/verification/:username/:verificationId" handler={Verify} />
         <Route name="logout" path="/logout" handler={AuthenticatedPage(LogoutPage)} />
     </Route>
 );
