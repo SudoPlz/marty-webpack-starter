@@ -1,83 +1,126 @@
 import _ from 'lodash';
+//import UsersAPI from '../sources/usersApi';
 import Marty from 'marty';
 import LoginConstants from '../constants/loginConstants';
 
+
 class LoginStore extends Marty.Store {
     constructor(options) {
-        super(options);
+        if(options)     {super(options)} else {super()}
 
         this.state = {
-            error: null,
-            user: false,
-            token: false
+            error: null,                //login error
+            user: null,                //User data
+            token: null               //The token to use on each request
         };
+        //this.api = new UsersAPI();
+        //this.attemptLogin = _.bind(this.attemptLogin, this);
+        //this.loginFailure = _.bind(this.loginFailure, this);
+        //this.logout = _.bind(this.logout, this);
 
         this.handlers = {
-            loginFailed: LoginConstants.LOGIN_FAILED,
-            gotToken: LoginConstants.RECEIVE_TOKEN,
-            gotUser: LoginConstants.RECEIVE_USER,
-            onLoggedIn: LoginConstants.LOGGED_IN,
-            onLoggedOut: LoginConstants.LOGGED_OUT,
-            rememberMe: LoginConstants.REMEMBER_ME
+            //attemptLogin: LoginConstants.LOGIN_ATTEMPT
+            onLoginSuccess: LoginConstants.LOGIN_SUCCESS,
+            onLoginFailure: LoginConstants.LOGIN_FAILURE,
+            onGotToken: LoginConstants.RECEIVE_TOKEN,
+            onLogout: LoginConstants.LOGGED_OUT,
+            onGotUserSuccess: LoginConstants.RECEIVE_USER
         };
 
     }
 
-    loginFailed(exception, code) {
-        console.log('LOGIN FAILED: '+exception+' code: '+code);
-        this.setState({error: exception});
+
+
+    onLoginSuccess(payload) {
+        this.clearErrors();
+        this.setState({user: payload.user, token: payload.token, error: payload.error});
+        //console.log('LOGIN Success');
     }
 
-    /**
-     * Remembers a user for a longer period than the this.app.session
-     */
-    rememberMe() {
-        this.app.localStorage.setToken(this.state.token);
+    onLoginFailure(payload) {
+        this.clearErrors();
+        this.setState({error: payload.error});
+        //console.log('LOGIN FAILURE: '+this.state.error);
     }
 
-    gotToken(token) {
-        this.app.session.setToken(token);
-        this.setState({token: token});
-    }
-
-    gotUser(user) {
-        this.setState({user: user});
-    }
-
-    onLoggedIn() {
-        console.log('login successful');
-
-        this.setState({error: null});
-    }
-
-    onLoggedOut() {
-        console.log('loggedOut');
-
-        this.app.session.logout();
-        this.app.localStorage.logout();
-
+    onLogout() {
         this.setState({
             token: null,
             user: null
         });
     }
 
+    onGotUserSuccess(user) {
+        this.setState({user: user});
+    }
+
+    onGotToken(token){
+        this.setState({token: token});
+    }
+
+
     getUser() {
         return this.fetch({
             id: 'get-user',
             locally() {
-                if (this.state.user) {
-                    return this.state.user;
+                //Try to fetch old tokens
+                if(!this.state.token) {         //if theres no token in our state
+                    var tok = this.app.session.getToken() || this.app.localStorage.getToken();
+                    //console.log('Token exists session: '+!!this.app.session.getToken()+ ' local storage: '+!!this.app.localStorage.getToken());
+                    if(tok){
+                        //console.log('Got old token: '+tok);
+                        //this.app.session.setToken(tok);
+                        this.setState({token: tok});
+                    }
                 }
+
+                /*
+                 *       1 out of 3 cases.
+                 *
+                 *   1) We've got a token AND weve got a user --> just return the user locally
+                 *
+                 *   2) We've got a token but we DONT have a user --> go remotely and fetch the user
+                 *
+                 *   3) We've got NO token and we've got NO user --> just return false locally
+                 *
+                 * */
+                if(!this.state.token) {     //if theres no token in our state       //case 3
+                    //console.log('No token NO user. NOT logged in.')
+                    return !!this.state.user;
+                }else{                      //if we got a token
+                    if(this.state.user){                                            //case 1
+                        //console.log('Got token AND user. Logged in.')
+                        return this.state.user;
+                    }else{                                                          //case 2
+                        //do nothing and fetch remotely
+                    }
+                }
+
             },
             remotely() {
-                return this.app.loginQueries.for(this).getUser();
+                if(this.state.token==null){
+                    throw new Error('Token is null, this shouldnt be running');
+                }
+                console.log('Lets remotely get the user.');
+                return this.app.loginQueries.getUserForToken(this.state.token);
             }
         })
     }
 
-    isLoggedIn() {
-        return !!this.state.user;
+    clearErrors(){
+        this.setState({error: null});
+    }
+
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////         GETTERS         ////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    getToken() {
+        return this.state.token;
     }
 
 
@@ -85,13 +128,8 @@ class LoginStore extends Marty.Store {
         return this.state.error;
     }
 
-    clearErrors(){
-        this.setState({error: null});
-    }
 
-    getToken() {
-        return this.state.token;
-    }
+
 }
 
 export default LoginStore;

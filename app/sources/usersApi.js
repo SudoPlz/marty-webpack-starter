@@ -1,7 +1,7 @@
 import Marty from 'marty';
 import {format} from 'util';
 import config from '../config.json';
-import httpRequest from 'superagent';
+//import httpRequest from 'superagent';
 
 var base = config.API.ROOT;
 var endpoint = base; //+ 'users';
@@ -22,6 +22,15 @@ class UserHttpAPI extends Marty.HttpStateSource {
     //    this.login = this.login.bind(this);
     //}
 
+
+    handleRes( res) {
+        let json = res.json();
+        //console.log('Responce in Json: '+JSON.stringify(json));
+        if (res.ok) {
+            return json;
+        }
+        throw new Error('Error in response', json, res);
+    }
 
 
     //login(username, password) {
@@ -50,59 +59,118 @@ class UserHttpAPI extends Marty.HttpStateSource {
     //    }).then(handleRes);
     //}
 
-    getSelf() {
-        return this.get(endpoint + '/self').then(handleRes);
+    getSelf(token, next) {
+        var url = format(endpoint + '/self');
+        return this.request({
+            url: url,
+            method: 'POST',
+            body: { token: token}
+        }).then(this.handleRes);
+
+        //return httpRequest.post(url)
+        //    .send({ token: token})
+        //    .set('Accept', 'application/json')
+        //    .end(next);
     }
 
 
-    login(username, password, next) {
+    logout(token) {
+        var url = format(endpoint + '/logout');
+        return this.request({
+            url: url,
+            method: 'POST',
+            body: { token:token }
+        }).then(this.handleRes);
+        //return httpRequest.post(url)
+        //    .send({ identifier: username, password: password })
+        //    .set('Accept', 'application/json')
+        //    .end(next);
+    }
+
+
+    login(username, password) {
+
         var url = format(endpoint + '/auth/local');
-        return httpRequest.post(url)
-            .send({ identifier: username, password: password })
-            .set('Accept', 'application/json')
-            .end(next);
+        return this.request({
+            url: url,
+            method: 'POST',
+            body: { identifier: username, password: password }
+        }).then(this.handleRes);
+        //return httpRequest.post(url)
+        //    .send({ identifier: username, password: password })
+        //    .set('Accept', 'application/json')
+        //    .end(next);
     }
 
     register(username, password, email, firstName, lastName, next) {
+
+        var url = format(endpoint + '/signup');
+        return this.request({
+            url: url,
+            method: 'POST',
+            body: {
+                username: username,
+                password: password,
+                email: email,
+                firstName: firstName,
+                lastName: lastName
+            }
+        }).then(this.handleRes);
+
+
         console.log('Attempting to register with us: '+username
             +' pas'+password
             +' mail: '
             +email+' fn: '
             +firstName+' ln: '
             +lastName);
-
-        var url = format(endpoint + '/signup');
-        return httpRequest.post(url)
-            .send({
-                username: username,
-                password: password,
-                email: email,
-                firstName: firstName,
-                lastName: lastName
-            })
-            .set('Accept', 'application/json')
-            .end(next);
+        //return httpRequest.post(url)
+        //    .send({
+        //        username: username,
+        //        password: password,
+        //        email: email,
+        //        firstName: firstName,
+        //        lastName: lastName
+        //    })
+        //    .set('Accept', 'application/json')
+        //    .end(next);
     }
 
     resendMail(username, next){
         var url = format(endpoint + '/reconfirm');
-        return httpRequest.post(url)
-            .send({
-                username: username
-            })
-            .set('Accept', 'application/json')
-            .end(next);
+
+        return this.request({
+            url: url,
+            method: 'POST',
+            body: { username: username }
+        }).then(this.handleRes);
+
+        //return httpRequest.post(url)
+        //    .send({
+        //        username: username
+        //    })
+        //    .set('Accept', 'application/json')
+        //    .end(next);
     }
 
     verifyMail(username, verificationId, next){
         var url = format(endpoint + '/signup/verify');
-        return httpRequest.post(url)
-            .send({
+        return this.request({
+            url: url,
+            method: 'POST',
+            body: {
                 username: username
                 ,verificationId: verificationId
-            })
-            .set('Accept', 'application/json')
-            .end(next);
+            }
+        }).then(this.handleRes);
+
+        //return httpRequest.post(url)
+        //    .send({
+        //        username: username
+        //        ,verificationId: verificationId
+        //    })
+        //    .set('Accept', 'application/json')
+        //    .end(next);
     }
 
 

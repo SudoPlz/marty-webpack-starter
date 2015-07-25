@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import Marty from 'marty';
 import RegisterConstants from '../constants/registerConstants.js';
-import UsersAPI from '../sources/usersApi.js';
+//import UsersAPI from '../sources/usersApi.js';
 
 class RegisterStore extends Marty.Store {
     constructor(options) {
         super(options);
-        this.api = new UsersAPI();
+        //this.api = new UsersAPI();
         this.state = {
             registError: null,
             verifMessage:null,
@@ -32,14 +32,14 @@ class RegisterStore extends Marty.Store {
     attemptRegister(payLoad){
         var self = this;
         this.setState({didRegistSucceed:null});
-        this.api.register(payLoad.username, payLoad.password, payLoad.email, payLoad.firstName, payLoad.lastName, (error, res) => {
+        this.usersApi.register(payLoad.username, payLoad.password, payLoad.email, payLoad.firstName, payLoad.lastName, (error, res) => {
             this.handleServerResponce(error, res, self.registerSuccess, self.registerFailed);
         })
     }
 
     resendMail(username){
         var self = this;
-        this.api.resendMail(username, (error, res) => {
+        this.usersApi.resendMail(username, (error, res) => {
             this.handleServerResponce(error, res, self.resendMailSuccess, self.resendMailFailed );
         })
     }
@@ -47,7 +47,7 @@ class RegisterStore extends Marty.Store {
     verifyMail(username, verificationId){
         this.setState({didVerifSucceed:null});
         var self = this;
-        this.api.verifyMail(username, verificationId, (error, res) => {
+        this.usersApi.verifyMail(username, verificationId, (error, res) => {
             this.handleServerResponce(error, res, self.verifMailSuccess, self.verifMailFailed );
         })
     }

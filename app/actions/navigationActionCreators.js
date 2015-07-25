@@ -18,11 +18,12 @@ class NavigationActionCreators extends Marty.ActionCreators {
 
     changeRoute(state) {
         //console.log(' changeRoute !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '+JSON.stringify(state));
-        this.dispatch(NavigationConstants.CHANGE_ROUTE, state);
 
+        this.dispatch(NavigationConstants.CHANGE_ROUTE, state);
         if (state.path === '/logout') {
             this.app.loginActionCreators.logout();
         }
+
     }
 
     navigateTo(route, params={}) {

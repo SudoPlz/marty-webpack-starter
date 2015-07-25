@@ -24,28 +24,32 @@ class Application extends Marty.Application {
 
     }
 
-    registerHooks() {
-        let context = require.context('./', true, /hooks/);
-
-        requireFromContext(context, key => {
-            console.log('registering hook', key);
-            context(key); // Run
-        });
-    }
+    //registerHooks() {
+    //    let context = require.context('./', true, /hooks/);
+    //
+    //    requireFromContext(context, key => {
+    //        console.log('registering hook', key);
+    //        context(key); // Run
+    //    });
+    //}
 
     constructor(options) {
         super(options);
-        //console.group('Marty registrations: ');
+        if(Marty.isBrowser){
+            console.group('Marty registrations: ');
+        }
 
+        //console.log('Marty registrations: ');
         this.registerDependencies();
 
         //console.log('Now registering hooks.');
         //this.registerHooks();
         //console.log('Now registering router.');
         this.router = require('./router');
-        console.log('Attempting to re auth.');
-        this.loginActionCreators.attemptReAuth();
-        //console.groupEnd();
+        if(Marty.isBrowser){
+            console.groupEnd();
+        }
+
     }
 }
 

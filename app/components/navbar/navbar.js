@@ -2,6 +2,8 @@ import React from 'react'
 import {Nav, Navbar, CollapsibleNav, NavItem, DropdownButton, MenuItem, ListGroup, ModalTrigger, Button} from 'react-bootstrap';
 import {NavItemLink,ButtonLink,ListGroupItemLink,MenuItemLink} from 'react-router-bootstrap';
 import ModalLogin from './../loginForm/modalLogin';
+import Marty from 'marty';
+import _ from 'lodash';
 
 class MyNavbar extends React.Component {
 
@@ -10,11 +12,11 @@ class MyNavbar extends React.Component {
         //this.render = this.render.bind(this);
         this.state = { isLoginModalOpen:false };
 
-        this.openLoginModal = this.openLoginModal.bind(this);
-        this.closeLoginModal = this.closeLoginModal.bind(this);
-
+        this.openLoginModal = _.bind(this.openLoginModal, this);
+        this.closeLoginModal = _.bind(this.closeLoginModal, this);
+        this.attemptUserLogout = _.bind(this.attemptUserLogout, this);
+        this.isLoggedIn = _.bind(this.isLoggedIn, this);
     }
-
 
 
 
@@ -22,10 +24,10 @@ class MyNavbar extends React.Component {
     render(){
         var loggedInNavBar =
             (<Nav navbar right>
-                <DropdownButton eventKey={3} title='Dropdown'>
-                    <MenuItemLink to='destination' params={{ someparam: 'hello' }}>Profile</MenuItemLink>
+                <DropdownButton eventKey={3} title={this.props.user?this.props.user.username:'User'}>
+                    <MenuItemLink to='profile'>Profile</MenuItemLink>
                     <MenuItem divider />
-                    <MenuItemLink to='destination' params={{ someparam: 'hello' }}>Logout</MenuItemLink>
+                    <NavItem onClick={this.attemptUserLogout}>Logout</NavItem>
                 </DropdownButton>
             </Nav>);
 
@@ -36,7 +38,7 @@ class MyNavbar extends React.Component {
             </Nav>);
         return (
             <div>
-                <ModalLogin show={this.state.isLoginModalOpen} onHide={this.closeLoginModal}/>
+                <ModalLogin show={(this.props.user)?false:this.state.isLoginModalOpen} onHide={this.closeLoginModal}/>
                 <Navbar brand={<a href='#'>React-Bootstrap</a>} toggleNavKey={0}>
                     <CollapsibleNav eventKey={0}> {/* This is the eventKey referenced */}
                         <Nav navbar>
@@ -44,11 +46,16 @@ class MyNavbar extends React.Component {
 
                             <NavItemLink to='about' params={{ someparam: 'hello' }}>About</NavItemLink>
                         </Nav>
-                        {this.props.isLoggedIn?loggedInNavBar:loggedOutNavBar}
+                        {(this.props.user)?loggedInNavBar:loggedOutNavBar}
                     </CollapsibleNav>
                 </Navbar>
             </div>
         );
+    }
+
+
+    isLoggedIn(){
+        return !!this.props.user;
     }
 
     openLoginModal(){
@@ -58,10 +65,22 @@ class MyNavbar extends React.Component {
     closeLoginModal() {
         this.setState({ isLoginModalOpen: false });
     }
+
+    attemptUserLogout(){
+        this.app.loginActionCreators.attemptLogout();
+    }
 }
 
 MyNavbar.propTypes = {
     isLoginModalOpen:React.PropTypes.bool
 };
 
-export default MyNavbar;
+export default Marty.createContainer(MyNavbar, {
+    listenTo: ['loginStore'],
+    fetch: {
+        user(){
+            var usr = this.app.loginStore.getUser();
+            return (!usr)?false:usr;
+        }
+    }
+});
