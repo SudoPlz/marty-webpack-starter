@@ -22,6 +22,7 @@ fs.readdirSync('node_modules')
         return ['.bin'].indexOf(x) === -1;
     })
     .forEach(function(mod) {
+        console.log('Node module: '+mod);
         nodeModules[mod] = 'commonjs ' + mod;
     });
 
@@ -101,7 +102,6 @@ module.exports =
     },
 
     postcss: [
-        require('postcss-local-scope'),
         require('autoprefixer-core')
     ],
 

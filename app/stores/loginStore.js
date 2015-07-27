@@ -64,15 +64,16 @@ class LoginStore extends Marty.Store {
             id: 'get-user',
             locally() {
                 //Try to fetch old tokens
-                if(!this.state.token) {         //if theres no token in our state
+                if(!this.state.token && Marty.isBrowser) {         //if theres no token in our state
                     var tok = this.app.session.getToken() || this.app.localStorage.getToken();
-                    //console.log('Token exists session: '+!!this.app.session.getToken()+ ' local storage: '+!!this.app.localStorage.getToken());
-                    if(tok){
-                        //console.log('Got old token: '+tok);
+                    //console.log('Token exists session: '+!!this.app.session.getToken()+ ' local storage: '+!!this.app.localStorage.getToken()+' ::'+(typeof tok!=undefined));
+                    if(tok != null && tok.length>0){
+                        console.log('Got old token: '+tok);
                         //this.app.session.setToken(tok);
                         this.setState({token: tok});
                     }
                 }
+
 
                 /*
                  *       1 out of 3 cases.

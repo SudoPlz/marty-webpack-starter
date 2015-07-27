@@ -28,10 +28,12 @@ class LoginActionCreators extends Marty.ActionCreators {
                     var token = data.token;
                     this.app.session.setToken(token);
                     this.app.localStorage.setToken(token);
+                    console.log('%%% - ABOUT to set username 1 sinse rememberMe is: '+payLoad.rememberMe);
                     if(payLoad.rememberMe){
+                        console.log('%%% - ABOUT to set username 2 to: '+ payLoad.username);
                         this.app.localStorage.setUsername(payLoad.username);
                     }else{
-                        this.app.localStorage.setUsername(null);
+                        this.app.localStorage.setUsername('');
                     }
 
                     this.dispatch(LoginConstants.LOGIN_SUCCESS, {user: data.user, token: token, error: null});
@@ -50,7 +52,7 @@ class LoginActionCreators extends Marty.ActionCreators {
 
 
     attemptLogout(){
-
+        console.log('Logout.');
         var token = this.app.loginStore.getToken();
         this.app.session.logout();
         this.app.localStorage.logout();

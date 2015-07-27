@@ -2,12 +2,11 @@
     var express = require('express');
     var path = require('path');
     var logger = require('morgan');
-    var bodyParser = require('body-parser');
+    //var bodyParser = require('body-parser');
     var configFile = require('../config.json');
     var proxy = require('proxy-middleware');
     var url = require('url');
-    var morgan = require('morgan');
-    var bodyParser = require('body-parser');
+    //var morgan = require('morgan');
     var favicon = require('serve-favicon');
 
     var isProduction = process.env.NODE_ENV === 'production';

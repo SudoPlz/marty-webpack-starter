@@ -29,7 +29,7 @@ class LoginQueries extends Marty.Queries {
                     this.dispatch(LoginConstants.RECEIVE_USER, data);
                     return data;
                 }else{
-                    //console.log('SELF FAILED: '+message+' code: '+code);
+                    console.log('SELF FAILED: '+message);
                     this.app.loginActionCreators.attemptLogout();
                     //console.log('Err is: '+message);
                     return message;

@@ -27,7 +27,7 @@ class LoginPage extends React.Component {
         var payload = {
             username: this.refs.username.getValue(),
             password : this.refs.password.getValue(),
-            rememberMe : this.refs.rememberMe.checked
+            rememberMe : this.refs.rememberMe.getChecked()
         };
 
         //console.log('Trying to log in with: '+payload.username + payload.password);
@@ -39,10 +39,10 @@ class LoginPage extends React.Component {
     render() {
         //console.log('show is : '+this.props.show);
         if(!!this.props.user){
-            console.log('USER logged in');
+            //console.log('USER logged in');
             return (<div></div>);
         }else{
-            console.log('USER NOT logged in');
+            //console.log('USER NOT logged in');
             return (
                 <Row className='loginPage'>
                     <Col md={3}></Col>
@@ -54,7 +54,7 @@ class LoginPage extends React.Component {
                             </Alert>:''}</div>
                             <form method='post'>
                                 <Input name='username' ref='username' type='username' placeholder='Username or Email' autoFocus={true}
-                                       required={true} minLength={6} defaultValue={this.app.localStorage.getUsername()?this.app.localStorage.getUsername():null}/>
+                                       required={true} minLength={6} defaultValue={this.app.localStorage.getUsername()}/>
                                 <Input name='password' ref='password'  type='password' placeholder='Password'
                                        required={true} minLength={6}  onKeyDown={this.onKeyDown} />
                                 <Row className='loginBtns'>

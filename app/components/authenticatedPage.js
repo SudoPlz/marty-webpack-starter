@@ -7,10 +7,10 @@ import _ from 'lodash';
  * Given a component and an array of allowedRoles:
  * Automatically redirects away if current user in LoginStore does not match any of the allowed roles
  */
-    //public user admin
+//public user admin
 
 
-    //var availableRoles = ['public', 'user', 'admin'];
+//var availableRoles = ['public', 'user', 'admin'];
 
 export default function(OriginalComponent, allowedRoles) {
     let extendedComponent =  class extends React.Component {
@@ -26,17 +26,17 @@ export default function(OriginalComponent, allowedRoles) {
                 var curRole = !!this.props.user?'user':'public';
                 //curRole = this.props.isAdmin?'admin':curRole;
 
-                console.log('Cur role: '+curRole);
+                //console.log('Cur role: '+curRole);
                 var allowed = (_.findIndex(allowedRoles, function(chr) {return chr == curRole})==-1)?false:true;    //if -1 then curRole NOT allowed, else allowed
-                console.log('Allowed? : '+allowed);
+                //console.log('Allowed? : '+allowed);
                 if(!allowed && curRole=='public'){
-                    console.log('Navigate to login');
+                    //console.log('Navigate to login');
                     this.app.navigationActionCreators.navigateToLogin();
                 }else if(!allowed && curRole=='user'){
-                    console.log('Navigate to home');
+                    //console.log('Navigate to home');
                     this.app.navigationActionCreators.navigateHome();
                 }else{
-                    console.log('No need to do anything, user allowed.');
+                    //console.log('No need to do anything, user allowed.');
                 }
             }
         }
@@ -56,26 +56,25 @@ export default function(OriginalComponent, allowedRoles) {
         //    console.log('User: '+this.props.user);
         //    return !!this.props.user;
         //}
-
         render() {
-            return <OriginalComponent {...this.props} />
+            return <OriginalComponent {...this.props} checkPermissions={this.checkRoleCompability} />
         }
     };
 
     let container = Marty.createContainer(extendedComponent
         , {
-        listenTo: ['loginStore'],
-        fetch: {
+            listenTo: ['loginStore'],
+            fetch: {
 
-            //isAdmin(){
-            //    return this.app.loginStore.getUser().role=='admin';
-            //},
+                //isAdmin(){
+                //    return this.app.loginStore.getUser().role=='admin';
+                //},
 
-            user(){
-                return this.app.loginStore.getUser();
+                user(){
+                    return this.app.loginStore.getUser();
+                }
             }
         }
-    }
     );
     container.allowedRoles = allowedRoles;
     return container;

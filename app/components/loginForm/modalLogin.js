@@ -2,7 +2,7 @@ import React from 'react'
 import Marty from 'marty';
 import Panel from 'react-bootstrap/lib/Panel';
 import {Button, Input, Alert, Row, Col} from 'react-bootstrap';
-import Modal from 'react-bootstrap-modal';
+import Modal from '../../../libs/rbmLib/Modal.js';//'react-bootstrap-modal';
 import validator from 'validator'
 import _ from 'lodash';
 
@@ -15,19 +15,29 @@ class ModalLogin extends React.Component {
         this.handleLogin = _.bind(this.handleLogin, this);
         this.onDismiss = _.bind(this.onDismiss, this);
         this.onShow = _.bind(this.onShow, this);
+    }
 
 
+    componentWillReceiveProps(nextProps){
+        //console.log('Old user: '+this.props.user+ ' new user: '+nextProps.user);
+        if(this.props.user!=nextProps.user){
+            if(!!nextProps.user){
+                this.props.onHide();
+            }
+        }
     }
 
     handleLogin(event) {
+
+
+
         var payload = {
             username: this.refs.username.getValue(),
             password : this.refs.password.getValue(),
-            rememberMe : this.refs.rememberMe.checked
+            rememberMe : this.refs.rememberMe.getChecked()
         };
 
         //console.log('Trying to log in with: '+payload.username + payload.password);
-        //TODO: Add remember me on the parameters below
         this.app.loginActionCreators.attemptLogin(payload);
     }
 
@@ -35,7 +45,6 @@ class ModalLogin extends React.Component {
     //logout: function(e) {
     //    e.preventDefault();
     //    //SessionActionCreators.logout();
-    //    //TODO: Do something on logout
     //},
 
     //handleUsernameChange(event){
@@ -67,7 +76,7 @@ class ModalLogin extends React.Component {
         return (
             <Modal
                 show={this.props.show}
-                onTransitionedIn={this.onShow}
+                onShow={this.onShow}
                 onHide={this.onDismiss}
                 //backdrop={'static'}
                 animate={true}
@@ -83,7 +92,7 @@ class ModalLogin extends React.Component {
                         <strong>{this.props.error}</strong>
                     </Alert>:''}</div>
                     <Input name='username' ref='username' type='username' placeholder='Username or Email'
-                           required={true} minLength={6} defaultValue={this.app.localStorage.getUsername()?this.app.localStorage.getUsername():null}/>
+                           required={true} minLength={6} defaultValue={this.app.localStorage.getUsername()}/>
                     <Input name='password' ref='password'  type='password' placeholder='Password'
                            required={true} minLength={6}  onKeyDown={this.onKeyDown} />
                 </Modal.Body>
@@ -135,6 +144,10 @@ export default Marty.createContainer(ModalLogin, {
     fetch: {
         error() {
             return this.app.loginStore.getError();
+        },
+        user(){
+            var usr = this.app.loginStore.getUser();
+            return (!usr)?false:usr;
         }
         //,isLoggedIn(){
         //    return this.app.loginStore.isLoggedIn();
