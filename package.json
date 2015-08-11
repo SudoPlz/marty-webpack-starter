@@ -44,7 +44,7 @@
     "react": "^0.13.3",
     "react-router": "^0.13.3",
     "react-router-bootstrap":"latest",
-    "react-bootstrap": "^0.22.3",
+    "react-bootstrap": "^0.24.4",
     "serve-favicon":"latest",
     "validator":"latest",
     "superagent":"latest",

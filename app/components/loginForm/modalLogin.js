@@ -106,7 +106,7 @@ class ModalLogin extends React.Component {
                                 <Modal.Dismiss className='btn btn-default'>Cancel</Modal.Dismiss>
                             </Col>
                             <Col xs={3} md={6}>
-                                <Button onClick={this.handleLogin} type='#' bsStyle='success'>Login</Button>
+                                <Button onClick={this.handleLogin} type='submit' bsStyle='success'>Login</Button>
                             </Col>
                         </Col>
                     </Row>

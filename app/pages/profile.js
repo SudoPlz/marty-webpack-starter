@@ -15,18 +15,18 @@ class ProfilePage extends React.Component {
         };
         //this.onKeyDown = _.bind(this.onKeyDown, this);
         this.closeCredChangeModal = _.bind(this.closeCredChangeModal, this);
-        //this.openCredChangeModal = _.bind(this.openCredChangeModal, this);
+        this.openCredChangeModal = _.bind(this.openCredChangeModal, this);
 
     }
 
-    closeCredChangeModal(){
-        console.log('Modal SHUTS DOWN NOW!');
+    closeCredChangeModal(e){
         this.setState({modalProps: {visible:false, changeType:''}});
     }
-    //openCredChangeModal(){
-    //    this.setState({credChangeModalVisible:true});
-    //}
-    //
+
+    openCredChangeModal(type){
+        this.setState({modalProps: {visible:true, changeType:type}});
+    }
+
 
     componentWillReceiveProps(nextProps){
         //console.log('Old user: '+this.props.user+ ' new user: '+nextProps.user);
@@ -38,10 +38,10 @@ class ProfilePage extends React.Component {
     }
 
 
-//<ModalChangeCreds show={this.state.modalProps.visible} changeType={this.state.modalProps.changeType} closeFunc={this.closeCredChangeModal}/>
+
     render() {
         return(<div>
-
+            <ModalChangeCreds show={this.state.modalProps.visible} changeType={this.state.modalProps.changeType} closeFunc={this.closeCredChangeModal}/>
             <Panel bsStyle='info' className='profilePanel' >
                 <Row className='generalSettings'>
                     <Col md={3}>
@@ -79,14 +79,14 @@ class ProfilePage extends React.Component {
                         <Row className='passwordSettings tintBackgroundGrey'>
                             <Col md={6}>Password:</Col>
                             <Col md={4}>***********</Col>
-                            <Col md={2}>    <Button bsStyle='default'>Edit</Button> </Col>
+                            <Col md={2}>    <Button bsStyle='default' onClick={ (e)=>{this.openCredChangeModal('password')}}>Edit</Button> </Col>
                         </Row>
 
                         <PageHeader><small>Contact settings</small></PageHeader>
                         <Row className='usernameSettings'>
                             <Col md={6}>Mail address:</Col>
                             <Col md={4}>{this.props.user.email}</Col>
-                            <Col md={2}>    <Button bsStyle='default'>Edit</Button> </Col>
+                            <Col md={2}>    <Button bsStyle='default' onClick={ (e)=>{this.openCredChangeModal('email')}}>Edit</Button> </Col>
                         </Row>
                     </Col>
                 </Row>
@@ -94,6 +94,7 @@ class ProfilePage extends React.Component {
         </div>);
     }
 }
+//this.openCredChangeModal('PROOPS');
 ProfilePage.propTypes = {
 
 };
