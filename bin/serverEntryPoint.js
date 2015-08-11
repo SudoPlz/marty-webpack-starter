@@ -4113,7 +4113,15 @@
 	    value: true
 	});
 
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _marty = __webpack_require__(18);
 
@@ -4129,188 +4137,228 @@
 
 	var _reactBootstrap = __webpack_require__(12);
 
-	var ProfilePage = _react2['default'].createClass({
-	    displayName: 'Profile Component',
+	var _lodash = __webpack_require__(62);
 
-	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	        //console.log('Old user: '+this.props.user+ ' new user: '+nextProps.user);
-	        if (this.props.user != nextProps.user) {
-	            //console.log('Check for permission changes!');
-	            this.props.checkPermissions();
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _componentsChangeCredsModalModalChangeCredsJs = __webpack_require__(90);
+
+	var _componentsChangeCredsModalModalChangeCredsJs2 = _interopRequireDefault(_componentsChangeCredsModalModalChangeCredsJs);
+
+	var ProfilePage = (function (_React$Component) {
+	    _inherits(ProfilePage, _React$Component);
+
+	    function ProfilePage(props, context) {
+	        _classCallCheck(this, ProfilePage);
+
+	        _get(Object.getPrototypeOf(ProfilePage.prototype), 'constructor', this).call(this, props, context);
+	        this.state = {
+	            modalProps: { visible: false, changeType: '' }
+	        };
+	        //this.onKeyDown = _.bind(this.onKeyDown, this);
+	        this.closeCredChangeModal = _lodash2['default'].bind(this.closeCredChangeModal, this);
+	        //this.openCredChangeModal = _.bind(this.openCredChangeModal, this);
+	    }
+
+	    _createClass(ProfilePage, [{
+	        key: 'closeCredChangeModal',
+	        value: function closeCredChangeModal() {
+	            console.log('Modal SHUTS DOWN NOW!');
+	            this.setState({ modalProps: { visible: false, changeType: '' } });
 	        }
-	    },
 
-	    render: function render() {
-	        //{this.props.user.username}
-	        return _react2['default'].createElement(
-	            _reactBootstrap.Panel,
-	            { bsStyle: 'info', className: 'profilePanel' },
-	            _react2['default'].createElement(
-	                _reactBootstrap.Row,
-	                { className: 'generalSettings' },
+	        //openCredChangeModal(){
+	        //    this.setState({credChangeModalVisible:true});
+	        //}
+	        //
+
+	    }, {
+	        key: 'componentWillReceiveProps',
+	        value: function componentWillReceiveProps(nextProps) {
+	            //console.log('Old user: '+this.props.user+ ' new user: '+nextProps.user);
+	            if (this.props.user != nextProps.user) {
+	                //console.log('Check for permission changes!');
+	                this.props.checkPermissions();
+	            }
+	        }
+
+	        //<ModalChangeCreds show={this.state.modalProps.visible} changeType={this.state.modalProps.changeType} closeFunc={this.closeCredChangeModal}/>
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2['default'].createElement(
+	                'div',
+	                null,
 	                _react2['default'].createElement(
-	                    _reactBootstrap.Col,
-	                    { md: 3 },
-	                    _react2['default'].createElement(_reactBootstrap.Thumbnail, { href: '#', alt: '200x200', src: 'http://www.gravatar.com/avatar/' + (0, _md52['default'])(this.props.user.email) + '?s=200' })
-	                ),
-	                _react2['default'].createElement(
-	                    _reactBootstrap.Col,
-	                    { md: 9 },
-	                    _react2['default'].createElement(
-	                        _reactBootstrap.PageHeader,
-	                        null,
-	                        _react2['default'].createElement(
-	                            'small',
-	                            null,
-	                            'General settings'
-	                        )
-	                    ),
+	                    _reactBootstrap.Panel,
+	                    { bsStyle: 'info', className: 'profilePanel' },
 	                    _react2['default'].createElement(
 	                        _reactBootstrap.Row,
-	                        { className: 'firstNameSettings' },
+	                        { className: 'generalSettings' },
 	                        _react2['default'].createElement(
 	                            _reactBootstrap.Col,
-	                            { md: 6 },
-	                            'First name:'
-	                        ),
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 4 },
-	                            this.props.user.firstName
-	                        ),
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 2 },
-	                            '    '
-	                        )
-	                    ),
-	                    _react2['default'].createElement(
-	                        _reactBootstrap.Row,
-	                        { className: 'lastNameSettings' },
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 6 },
-	                            'Last name:'
-	                        ),
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 4 },
-	                            this.props.user.lastName
-	                        ),
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 2 },
-	                            '    '
-	                        )
-	                    ),
-	                    _react2['default'].createElement(
-	                        _reactBootstrap.Row,
-	                        { className: 'memberSinceSettings' },
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 6 },
-	                            'Member since:'
-	                        ),
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 4 },
-	                            new Date(this.props.user.createdAt).toDateString()
-	                        ),
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 2 },
-	                            ' '
-	                        )
-	                    ),
-	                    _react2['default'].createElement(
-	                        _reactBootstrap.Row,
-	                        { className: 'usernameSettings' },
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 6 },
-	                            'Username:'
-	                        ),
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 4 },
-	                            this.props.user.username
-	                        ),
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 2 },
-	                            '    ',
+	                            { md: 3 },
+	                            _react2['default'].createElement(_reactBootstrap.Thumbnail, { href: 'https://en.gravatar.com/support/what-is-gravatar/', alt: '200x200', src: 'http://www.gravatar.com/avatar/' + (0, _md52['default'])(this.props.user.email) + '?s=200' }),
 	                            _react2['default'].createElement(
-	                                _reactBootstrap.Button,
-	                                { bsStyle: 'default' },
-	                                'Edit'
-	                            ),
-	                            ' '
-	                        )
-	                    ),
-	                    _react2['default'].createElement(
-	                        _reactBootstrap.Row,
-	                        { className: 'passwordSettings' },
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 6 },
-	                            'Password:'
+	                                'p',
+	                                { className: 'thumbText' },
+	                                'Thumbnail taken from your gravatar account if you have one.'
+	                            )
 	                        ),
 	                        _react2['default'].createElement(
 	                            _reactBootstrap.Col,
-	                            { md: 4 },
-	                            '***********'
-	                        ),
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 2 },
-	                            '    ',
+	                            { md: 9 },
 	                            _react2['default'].createElement(
-	                                _reactBootstrap.Button,
-	                                { bsStyle: 'default' },
-	                                'Edit'
+	                                _reactBootstrap.PageHeader,
+	                                null,
+	                                _react2['default'].createElement(
+	                                    'small',
+	                                    null,
+	                                    'General settings'
+	                                )
 	                            ),
-	                            ' '
-	                        )
-	                    ),
-	                    _react2['default'].createElement(
-	                        _reactBootstrap.PageHeader,
-	                        null,
-	                        _react2['default'].createElement(
-	                            'small',
-	                            null,
-	                            'Contact settings'
-	                        )
-	                    ),
-	                    _react2['default'].createElement(
-	                        _reactBootstrap.Row,
-	                        { className: 'usernameSettings' },
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 6 },
-	                            'Mail address:'
-	                        ),
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 4 },
-	                            this.props.user.email
-	                        ),
-	                        _react2['default'].createElement(
-	                            _reactBootstrap.Col,
-	                            { md: 2 },
-	                            '    ',
 	                            _react2['default'].createElement(
-	                                _reactBootstrap.Button,
-	                                { bsStyle: 'default' },
-	                                'Edit'
+	                                _reactBootstrap.Row,
+	                                { className: 'firstNameSettings tintBackgroundGrey' },
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 6 },
+	                                    'First name:'
+	                                ),
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 4 },
+	                                    this.props.user.firstName
+	                                ),
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 2 },
+	                                    '    '
+	                                )
 	                            ),
-	                            ' '
+	                            _react2['default'].createElement(
+	                                _reactBootstrap.Row,
+	                                { className: 'lastNameSettings' },
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 6 },
+	                                    'Last name:'
+	                                ),
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 4 },
+	                                    this.props.user.lastName
+	                                ),
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 2 },
+	                                    '    '
+	                                )
+	                            ),
+	                            _react2['default'].createElement(
+	                                _reactBootstrap.Row,
+	                                { className: 'memberSinceSettings tintBackgroundGrey' },
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 6 },
+	                                    'Member since:'
+	                                ),
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 4 },
+	                                    new Date(this.props.user.createdAt).toDateString()
+	                                ),
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 2 },
+	                                    ' '
+	                                )
+	                            ),
+	                            _react2['default'].createElement(
+	                                _reactBootstrap.Row,
+	                                { className: 'usernameSettings' },
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 6 },
+	                                    'Username:'
+	                                ),
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 4 },
+	                                    this.props.user.username
+	                                ),
+	                                _react2['default'].createElement(_reactBootstrap.Col, { md: 2 })
+	                            ),
+	                            _react2['default'].createElement(
+	                                _reactBootstrap.Row,
+	                                { className: 'passwordSettings tintBackgroundGrey' },
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 6 },
+	                                    'Password:'
+	                                ),
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 4 },
+	                                    '***********'
+	                                ),
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 2 },
+	                                    '    ',
+	                                    _react2['default'].createElement(
+	                                        _reactBootstrap.Button,
+	                                        { bsStyle: 'default' },
+	                                        'Edit'
+	                                    ),
+	                                    ' '
+	                                )
+	                            ),
+	                            _react2['default'].createElement(
+	                                _reactBootstrap.PageHeader,
+	                                null,
+	                                _react2['default'].createElement(
+	                                    'small',
+	                                    null,
+	                                    'Contact settings'
+	                                )
+	                            ),
+	                            _react2['default'].createElement(
+	                                _reactBootstrap.Row,
+	                                { className: 'usernameSettings' },
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 6 },
+	                                    'Mail address:'
+	                                ),
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 4 },
+	                                    this.props.user.email
+	                                ),
+	                                _react2['default'].createElement(
+	                                    _reactBootstrap.Col,
+	                                    { md: 2 },
+	                                    '    ',
+	                                    _react2['default'].createElement(
+	                                        _reactBootstrap.Button,
+	                                        { bsStyle: 'default' },
+	                                        'Edit'
+	                                    ),
+	                                    ' '
+	                                )
+	                            )
 	                        )
 	                    )
 	                )
-	            )
-	        );
-	    }
-	});
+	            );
+	        }
+	    }]);
+
+	    return ProfilePage;
+	})(_react2['default'].Component);
+
+	ProfilePage.propTypes = {};
 
 	//<div>User: {this.props.user}</div>
 	exports['default'] = _marty2['default'].createContainer(ProfilePage, {
@@ -5839,6 +5887,209 @@
 	        //return Router.HashLocation;
 	    }
 	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 90 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(11);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _marty = __webpack_require__(18);
+
+	var _marty2 = _interopRequireDefault(_marty);
+
+	var _reactBootstrap = __webpack_require__(12);
+
+	var _validator = __webpack_require__(61);
+
+	var _validator2 = _interopRequireDefault(_validator);
+
+	var _lodash = __webpack_require__(62);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var ModalChangeCreds = (function (_React$Component) {
+	    _inherits(ModalChangeCreds, _React$Component);
+
+	    function ModalChangeCreds(props, context) {
+	        _classCallCheck(this, ModalChangeCreds);
+
+	        _get(Object.getPrototypeOf(ModalChangeCreds.prototype), 'constructor', this).call(this, props, context);
+	        //this.state = {
+	        //    showModal: false
+	        //};
+	        this.onKeyDown = _lodash2['default'].bind(this.onKeyDown, this);
+	        this.saveFunc = _lodash2['default'].bind(this.saveFunc, this);
+	        this.onHide = _lodash2['default'].bind(this.onHide, this);
+	        this.onRequestHide = _lodash2['default'].bind(this.onRequestHide, this);
+	    }
+
+	    //componentWillReceiveProps(nextProps){
+	    //    //console.log('Old user: '+this.props.user+ ' new user: '+nextProps.user);
+	    //    if(this.props.user!=nextProps.user){
+	    //        if(!!nextProps.user){
+	    //            this.props.onHide();
+	    //        }
+	    //    }
+	    //}
+
+	    //handleLogin(event) {
+	    //
+	    //    var payload = {
+	    //        username: this.refs.username.getValue(),
+	    //        password : this.refs.password.getValue(),
+	    //        rememberMe : this.refs.rememberMe.getChecked()
+	    //    };
+	    //
+	    //    //console.log('Trying to log in with: '+payload.username + payload.password);
+	    //    this.app.loginActionCreators.attemptLogin(payload);
+	    //}
+
+	    _createClass(ModalChangeCreds, [{
+	        key: 'onHide',
+	        value: function onHide() {
+	            console.log('ON hide.');
+	            //if(this.props.closeFunc){
+	            //    this.props.closeFunc();
+	            //}
+	        }
+	    }, {
+	        key: 'onRequestHide',
+	        value: function onRequestHide() {
+	            console.log('ON REQUEST hide.');
+	        }
+
+	        //import Header from 'react-bootstrap/lib/ModalHeader'
+
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            //console.log('show is : '+this.props.show);
+	            //autoFocus
+
+	            //console.log(Header+'test');
+	            return _react2['default'].createElement(
+	                'div',
+	                null,
+	                _react2['default'].createElement(
+	                    _reactBootstrap.Modal,
+	                    { show: this.props.show, onHide: this.onHide, onRequestHide: this.onRequestHide },
+	                    _react2['default'].createElement(
+	                        Header,
+	                        { closeButton: true },
+	                        _react2['default'].createElement(
+	                            Title,
+	                            null,
+	                            'Change your ',
+	                            this.props.changeType
+	                        )
+	                    ),
+	                    _react2['default'].createElement(
+	                        Body,
+	                        null,
+	                        _react2['default'].createElement(
+	                            'h4',
+	                            null,
+	                            'Lets change your ',
+	                            this.props.changeType
+	                        ),
+	                        _react2['default'].createElement(
+	                            'p',
+	                            null,
+	                            'Duis mollis, est non commodo luctus, nisi erat porttitor ligula.'
+	                        ),
+	                        _react2['default'].createElement('hr', null),
+	                        _react2['default'].createElement(_reactBootstrap.Input, { name: 'password', ref: 'password', type: 'password', placeholder: 'Password',
+	                            required: true, minLength: 6, onKeyDown: this.onKeyDown })
+	                    ),
+	                    _react2['default'].createElement(
+	                        Footer,
+	                        null,
+	                        _react2['default'].createElement(
+	                            _reactBootstrap.Button,
+	                            { onClick: this.onHide },
+	                            'Close'
+	                        ),
+	                        _react2['default'].createElement(
+	                            _reactBootstrap.Button,
+	                            { onClick: this.saveFunc },
+	                            'Save'
+	                        )
+	                    )
+	                ),
+	                _react2['default'].createElement(
+	                    'div',
+	                    null,
+	                    'Test'
+	                )
+	            );
+	        }
+	    }, {
+	        key: 'onKeyDown',
+	        value: function onKeyDown(e) {
+	            if (e.keyCode === 13) {
+	                this.handleLogin();
+	            }
+	        }
+
+	        //onShow(e){
+	        //    if(this.refs.username.getValue()&& this.refs.username.getValue().length>0){
+	        //        this.refs.password.getInputDOMNode().focus();
+	        //    }else{
+	        //        this.refs.username.getInputDOMNode().focus();
+	        //    }
+	        //}
+	    }, {
+	        key: 'saveFunc',
+	        value: function saveFunc(e) {
+
+	            this.props.closeFunc();
+	        }
+	    }]);
+
+	    return ModalChangeCreds;
+	})(_react2['default'].Component);
+
+	ModalChangeCreds.propTypes = {
+	    show: _react2['default'].PropTypes.bool,
+	    changeType: _react2['default'].PropTypes.string,
+	    closeFunc: _react2['default'].PropTypes.func
+	};
+
+	exports['default'] = _marty2['default'].createContainer(ModalChangeCreds, {
+	    listenTo: ['loginStore'],
+	    fetch: {
+	        //error() {
+	        //    return this.app.loginStore.getError();
+	        //},
+	        //user(){
+	        //    var usr = this.app.loginStore.getUser();
+	        //    return (!usr)?false:usr;
+	        //}
+	        //,isLoggedIn(){
+	        //    return this.app.loginStore.isLoggedIn();
+	        //}
+	    }
+	});
 	module.exports = exports['default'];
 
 /***/ }

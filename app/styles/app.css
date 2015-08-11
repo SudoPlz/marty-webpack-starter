@@ -1,6 +1,17 @@
 body {
   background: #ffcda1; }
 
+
+.thumbText {
+    text-align: center;
+    font-style: italic;
+    color: rgba(27, 25, 27, 0.13);
+}
+
+.tintBackgroundGrey{
+    background-color: rgba(76, 150, 207, 0.03);
+}
+
 .register {
   max-width: 40em;
   margin: 0 auto 10px; }
