@@ -10,9 +10,7 @@ class RegisterStore extends Marty.Store {
         this.state = {
             registError: null,
             verifMessage:null,
-            didVerifSucceed: null,
-            didRegistSucceed: null
-
+            didVerifSucceed: null
         };
         this.registerSuccess = _.bind(this.registerSuccess, this);
         this.registerFailed = _.bind(this.registerFailed, this);
@@ -20,22 +18,14 @@ class RegisterStore extends Marty.Store {
         this.verifMailFailed = _.bind(this.verifMailFailed, this);
 
         this.handlers = {
-            attemptRegister:RegisterConstants.REGISTER_NEW_USER,
             resendMail: RegisterConstants.RESEND_CONFIRM_MAIL,
-            verifyMail: RegisterConstants.VERIFY_MAIL_ADDRESS
-            //registerSuccess: RegisterConstants.RECEIVE_REGIST_SUCCESS,
-            //registerFailed: RegisterConstants.RECEIVE_REGIST_FAILED
+            verifyMail: RegisterConstants.VERIFY_MAIL_ADDRESS,
+            registerSuccess: RegisterConstants.RECEIVE_REGIST_SUCCESS,
+            registerFailed: RegisterConstants.RECEIVE_REGIST_FAILED
         };
 
     }
 
-    attemptRegister(payLoad){
-        var self = this;
-        this.setState({didRegistSucceed:null});
-        this.usersApi.register(payLoad.username, payLoad.password, payLoad.email, payLoad.firstName, payLoad.lastName, (error, res) => {
-            this.handleServerResponce(error, res, self.registerSuccess, self.registerFailed);
-        })
-    }
 
     resendMail(username){
         var self = this;
@@ -52,7 +42,15 @@ class RegisterStore extends Marty.Store {
         })
     }
 
+    registerFailed(payload) {
+        console.log('REGISTRATION FAILED: '+payload.message+' code: '+payload.code);
+        this.setState({registError: payload.message});
+    }
 
+    registerSuccess(payload){
+        this.setState({registError: null});
+        this.app.navigationActionCreators.navigateToVerify(payload.data.username);
+    }
 
 
 
@@ -89,20 +87,8 @@ class RegisterStore extends Marty.Store {
     }
 
 
-    registerFailed(exception, code) {
-        console.log('REGISTRATION FAILED: '+exception+' code: '+code);
-        this.setState({registError: exception, didRegistSucceed:false});
-    }
-
-    registerSuccess(data){
-        this.setState({registError: null, didRegistSucceed:true});
-        this.app.navigationActionCreators.navigateToVerify(data.username);
-    }
 
 
-    didRegistrationSucceed() {
-        return this.state.didRegistSucceed;
-    }
 
     //wether user email verification succeded or failed
     didVerificationSucceed() {
@@ -118,10 +104,10 @@ class RegisterStore extends Marty.Store {
     }
 
     clearRegistErrors(){
-        this.setState({registError: null, didRegistSucceed:null});
+        this.setState({registError: null});
     }
     clearVerifErrors(){
-        this.setState({verifMessage: null, didVerifSucceed:null});
+        this.setState({verifMessage: null});
     }
 
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import Marty from 'marty';
-import {Button, Modal, Input} from 'react-bootstrap';
+import {Button, Modal, Input, Alert} from 'react-bootstrap';
 import validator from 'validator'
 import _ from 'lodash';
 
@@ -12,10 +12,11 @@ class ModalChangeCreds extends React.Component {
 
 
         this.state = {
-            labelOne:{error:'', style:''},
-            labelTwo:{error:'', style:''},
-            labelThree:{error:'', style:''},
-            newPass:''
+            labelOne:{error:'', style:null},
+            labelTwo:{error:'', style:null},
+            labelThree:{error:'', style:null},
+            newPass:'',
+            alertBox:{msg:'',style:null}
         };
         this.onKeyDown = _.bind(this.onKeyDown, this);
         this.saveFunc = _.bind(this.saveFunc, this);
@@ -103,7 +104,7 @@ class ModalChangeCreds extends React.Component {
         let PasswordBody =
             <Modal.Body>
                 <h5>Type your old password.</h5>
-                <Input name='oldPasswordInput' type='password' placeholder='Old password' label={this.state.labelOne.error}
+                <Input name='oldPasswordInput' ref='oldPasswordCredInput' type='password' placeholder='Old password' label={this.state.labelOne.error}
                        required={true} minLength={6} bsStyle={this.state.labelOne.style} onChange={
                     (e)=>{
                         let oldPassword = event.target.value;
@@ -143,7 +144,7 @@ class ModalChangeCreds extends React.Component {
                     }
                 }/>
                 <h5>Type your new password again.</h5>
-                <Input name='newPasswordInput' type='password' placeholder='New password again' label={this.state.labelThree.error}
+                <Input name='newPasswordInput' type='password' ref='newPasswordCredInput' placeholder='New password again' label={this.state.labelThree.error}
                        required={true} minLength={6} bsStyle={this.state.labelThree.style} onKeyDown={this.onKeyDown} onChange={
                     (e)=>{
                         let passwordConf = event.target.value;
@@ -177,7 +178,17 @@ class ModalChangeCreds extends React.Component {
         }
 
 
-        return (<Modal show={this.props.show} onHide={this.onHide} >
+
+
+
+//'danger'
+        return (<div>
+            <Modal show={this.props.show} onHide={this.onHide} >
+                <div className='loginErrorLbl' >{this.state.alertBox.msg?
+                    <Alert bsStyle={this.state.alertBox.style}><strong>{this.state.alertBox.msg}</strong></Alert>
+                    :
+                    ''}
+                </div>
                 <Modal.Header closeButton>
                     <Modal.Title>Change your {this.props.changeType}</Modal.Title>
                 </Modal.Header>
@@ -186,7 +197,8 @@ class ModalChangeCreds extends React.Component {
                     <Button onClick={this.onHide}>Close</Button>
                     <Button onClick={this.saveFunc}>Save</Button>
                 </Modal.Footer>
-            </Modal>);
+            </Modal>
+        </div>);
     }
 
     onKeyDown(e) {
@@ -204,7 +216,38 @@ class ModalChangeCreds extends React.Component {
     //}
     saveFunc(e){
 
-        this.props.closeFunc();
+        if(this.props.changeType=='password'){
+
+            let oldPassword = this.refs.oldPasswordCredInput.getValue();
+            let newPassword = this.refs.newPasswordCredInput.getValue();
+            console.log('Old: '+oldPassword+' new: '+newPassword);
+            this.app.loginActionCreators.attemptChangePassword(oldPassword, newPassword, (done, msg)=>{
+                console.log('Result: '+done);
+                var bsStyle;
+                if(done) {
+                    bsStyle = 'success';
+                    if (this.props.parentAlertBox) {
+                        this.props.parentAlertBox(bsStyle, msg);
+                    } else {
+                        this.setState({alertBox: {msg: msg, style: bsStyle}});
+                    }
+                    console.log('About to call closeFunc');
+                    this.props.closeFunc();
+                    setTimeout(()=> {
+                        this.app.loginActionCreators.attemptLogout()
+                    }, 2500);
+                }
+                else{
+                    bsStyle='danger';
+                    this.setState({alertBox:{msg:msg,style:bsStyle}});
+                }
+
+
+
+
+            });
+        }
+
     }
 }
 

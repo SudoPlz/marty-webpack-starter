@@ -12,7 +12,7 @@ class NavigationActionCreators extends Marty.ActionCreators {
     }
 
     navigateToVerify(username) {
-        //console.log(' navigateToLogin !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        //console.log(' navigateToVerification page !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         this.navigateTo('verify', {username:username, verificationId:'id'});
     }
 

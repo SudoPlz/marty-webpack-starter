@@ -74,6 +74,17 @@ class UserHttpAPI extends Marty.HttpStateSource {
     }
 
 
+    changePassword(token, oldPassword, newPassword){
+        var url = format(endpoint + '/changeCredentials/password');
+        return this.request({
+            url: url,
+            headers:{Authorization:'Bearer '+token},
+            method: 'POST',
+            body: { userToken:token, oldPass:oldPassword, newPass:newPassword }
+        }).then(this.handleRes);
+    }
+
+
     logout(token) {
         var url = format(endpoint + '/logout');
         return this.request({
@@ -102,7 +113,7 @@ class UserHttpAPI extends Marty.HttpStateSource {
         //    .end(next);
     }
 
-    register(username, password, email, firstName, lastName, next) {
+    register(username, password, email, firstName, lastName) {
 
         var url = format(endpoint + '/signup');
         return this.request({
@@ -136,6 +147,8 @@ class UserHttpAPI extends Marty.HttpStateSource {
         //    .end(next);
     }
 
+
+    //TODO: Endpoint in backend does not yet exist for this
     resendMail(username, next){
         var url = format(endpoint + '/reconfirm');
 

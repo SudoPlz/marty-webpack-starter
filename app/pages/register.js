@@ -268,10 +268,7 @@ export default Marty.createContainer(RegisterPage, {
         error() {
             return this.app.registerStore.getRegistError();
         }
-        //,
-        //registSuccess() {
-        //    return this.app.registerStore.didRegistrationSucceed();
-        //}
+
     }
 
 });

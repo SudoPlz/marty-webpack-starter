@@ -2,7 +2,7 @@
 import Marty from 'marty';
 import React from 'react';
 import MD5 from 'md5';
-import {PageHeader, Panel, Row, Col, Button, Thumbnail} from 'react-bootstrap';
+import {PageHeader, Panel, Row, Col, Button, Thumbnail, Alert} from 'react-bootstrap';
 import _ from 'lodash';
 import ModalChangeCreds from '../components/changeCredsModal/modalChangeCreds.js';
 
@@ -11,15 +11,17 @@ class ProfilePage extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            modalProps: {visible:false, changeType:''}
+            modalProps: {visible:false, changeType:''},
+            alertBox:{msg:'',style:null}
         };
         //this.onKeyDown = _.bind(this.onKeyDown, this);
         this.closeCredChangeModal = _.bind(this.closeCredChangeModal, this);
         this.openCredChangeModal = _.bind(this.openCredChangeModal, this);
-
+        this.setAlertBox = _.bind(this.setAlertBox, this);
     }
 
     closeCredChangeModal(e){
+        console.log('closeFunc ran');
         this.setState({modalProps: {visible:false, changeType:''}});
     }
 
@@ -37,11 +39,18 @@ class ProfilePage extends React.Component {
 
     }
 
-
+    setAlertBox(style, msg){
+        this.setState({alertBox:{msg:msg,style:style}});
+    }
 
     render() {
         return(<div>
-            <ModalChangeCreds show={this.state.modalProps.visible} changeType={this.state.modalProps.changeType} closeFunc={this.closeCredChangeModal}/>
+            <div className='loginErrorLbl' >{this.state.alertBox.msg?
+                <Alert bsStyle={this.state.alertBox.style}><strong>{this.state.alertBox.msg}</strong></Alert>
+                :
+                ''}
+            </div>
+            <ModalChangeCreds show={this.state.modalProps.visible} changeType={this.state.modalProps.changeType} closeFunc={this.closeCredChangeModal} parentAlertBox={this.setAlertBox}/>
             <Panel bsStyle='info' className='profilePanel' >
                 <Row className='generalSettings'>
                     <Col md={3}>

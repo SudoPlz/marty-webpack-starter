@@ -10,7 +10,7 @@ class LoginActionCreators extends Marty.ActionCreators {
     }
 
 
-        //this.dispatch(LoginConstants.LOGIN_ATTEMPT, payload);
+    //this.dispatch(LoginConstants.LOGIN_ATTEMPT, payload);
 
 
 
@@ -43,7 +43,7 @@ class LoginActionCreators extends Marty.ActionCreators {
                     this.dispatch(LoginConstants.LOGIN_FAILURE, {error: message});
                 }
             },
-            err=>{
+                err=>{
                 console.log('loginStore.attemptLogin err: '+err);
                 this.dispatch(LoginConstants.LOGIN_FAILURE, {error: 'Huston we got a problem and as a result puppies are dying right now. Please try again later.'});
             }
@@ -58,7 +58,27 @@ class LoginActionCreators extends Marty.ActionCreators {
         this.app.localStorage.logout();
         this.app.usersApi.logout(token).then(res =>{}, err=>{});
         this.dispatch(LoginConstants.LOGGED_OUT);
+    }
 
+
+    attemptChangePassword(oldPassword, newPassword, next){
+        console.log('ChangePassword.');
+        var token = this.app.loginStore.getToken();
+
+        this.app.usersApi.changePassword(token, oldPassword, newPassword).then(
+                res =>{
+                //console.log('Response received: '+JSON.stringify(res));
+                let {status, code, message} = res;
+                if(status=='success'){
+                    return next(true, message);
+                }else{
+                    return next(false, message);
+                }
+            },
+                err=>{
+                    return next(false, err);
+            }
+        );
     }
 
 
