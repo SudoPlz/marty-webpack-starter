@@ -35,8 +35,26 @@ class RegisterActionCreator extends Marty.ActionCreators {
         this.dispatch(RegisterConstants.RESEND_CONFIRM_MAIL, username);
     }
 
-    verifyMailAddressById(username, verId){
-        this.dispatch(RegisterConstants.VERIFY_MAIL_ADDRESS, username, verId);
+    verifyMailAddressById(username, verificationId){
+        //console.log('About to verify mail address of: '+username+' with ver id: '+verificationId);
+        this.app.usersApi.verifyMail(username, verificationId).then(
+                res =>{
+                //console.log('Response received: '+JSON.stringify(res));
+                let {status, code, message, data} = res;
+                if(status=='success'){
+                    //console.log('Verif  SUCCESS !');
+                    this.dispatch(RegisterConstants.RECEIVE_MAIL_VERIF_SUCCESS, {message: message, data: data});
+                    //console.log('REGIST SUCCESS')
+                }else{
+                    //console.log('Verif  FAILURE: '+message);
+                    this.dispatch(RegisterConstants.RECEIVE_MAIL_VERIF_FAILED, {message: message, code: code});
+                }
+            },
+                err=>{
+                //console.log('registerActionCreators.attemptRegister err: '+err);
+                this.dispatch(RegisterConstants.RECEIVE_MAIL_VERIF_FAILED, {message: 'Huston our server is down and as a result puppies are dying right now. Please try again later.'});
+            }
+        );
     }
 
 }

@@ -27,14 +27,15 @@ class NavigationActionCreators extends Marty.ActionCreators {
     }
 
     reload(){
-
         console.log('Reloading');
         this.app.router.refresh();
     }
 
-    navigateTo(route, params={}) {
-        //console.log('navigate to', route, params);
-        this.app.router.transitionTo(route, params);
+    navigateTo(route, params={}, delay=200) {
+        setTimeout(()=>{
+            this.app.router.transitionTo(route, params);
+        },delay);
+        //console.log('navigate to', route, JSON.stringify(params));
     }
 }
 

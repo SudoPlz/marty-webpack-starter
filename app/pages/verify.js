@@ -9,6 +9,7 @@ class VerifyPage extends React.Component {
     constructor(props, context) {
         super(props, context);
 
+        console.log('Verify started..!');
         //this.render = _.bind(this.render, this);
         this.handleAlertDismiss = _.bind(this.handleAlertDismiss, this);
         this.componentDidMount = _.bind(this.componentDidMount, this);
@@ -71,17 +72,21 @@ class VerifyPage extends React.Component {
         }else if(this.props.params.verificationId.length == 7) {    //if the user really provided a verif id
             return (
                 <div className='verify'>
-                    <div className='verifErrorLbl' >{
-                        this.props.mailIsVerified==false?
+                    <div className='verifErrorLbl' >
+                        {((this.props.mailIsVerified==null) || (this.props.mailIsVerified==true))?
+                            '':
                             <Alert bsStyle='danger'>
                                 <strong>{this.props.verifMessage}</strong>
                             </Alert>
-                            :
-                            ''}
+                        }
                     </div>
                     <Jumbotron>
                         <h1>Thank you for signing up {this.props.params.username}.</h1>
-                        {this.props.mailIsVerified==false?<p>We are currently checking your verification id.</p>:<p>Your email address is now verified..!<span className="glyphicon glyphicon-ok "></span></p>}
+                        {(this.props.mailIsVerified==null)?<p>We are currently checking your verification id.</p>:
+                            (this.props.mailIsVerified==true)?
+                            <p>Your email address is now verified..!<span className="glyphicon glyphicon-ok "></span></p>:
+                                <p>We were not able to verify your mail address.<span className="glyphicon glyphicon-remove"></span></p>
+                        }
                         <Spinner   top='83%' left='50%' loaded={(this.props.mailIsVerified!=null)}></Spinner>
                     </Jumbotron>
                 </div>

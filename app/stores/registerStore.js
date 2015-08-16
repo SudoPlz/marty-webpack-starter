@@ -9,7 +9,7 @@ class RegisterStore extends Marty.Store {
         //this.api = new UsersAPI();
         this.state = {
             registError: null,
-            verifMessage:null,
+            verifMessage:'',
             didVerifSucceed: null
         };
         this.registerSuccess = _.bind(this.registerSuccess, this);
@@ -18,29 +18,22 @@ class RegisterStore extends Marty.Store {
         this.verifMailFailed = _.bind(this.verifMailFailed, this);
 
         this.handlers = {
-            resendMail: RegisterConstants.RESEND_CONFIRM_MAIL,
-            verifyMail: RegisterConstants.VERIFY_MAIL_ADDRESS,
+            //resendMail: RegisterConstants.RESEND_CONFIRM_MAIL,
+            //verifyMail: RegisterConstants.VERIFY_MAIL_ADDRESS,
             registerSuccess: RegisterConstants.RECEIVE_REGIST_SUCCESS,
-            registerFailed: RegisterConstants.RECEIVE_REGIST_FAILED
+            registerFailed: RegisterConstants.RECEIVE_REGIST_FAILED,
+            verifMailSuccess: RegisterConstants.RECEIVE_MAIL_VERIF_SUCCESS,
+            verifMailFailed: RegisterConstants.RECEIVE_MAIL_VERIF_FAILED
         };
 
     }
 
-
-    resendMail(username){
-        var self = this;
-        this.usersApi.resendMail(username, (error, res) => {
-            this.handleServerResponce(error, res, self.resendMailSuccess, self.resendMailFailed );
-        })
-    }
-
-    verifyMail(username, verificationId){
-        this.setState({didVerifSucceed:null});
-        var self = this;
-        this.usersApi.verifyMail(username, verificationId, (error, res) => {
-            this.handleServerResponce(error, res, self.verifMailSuccess, self.verifMailFailed );
-        })
-    }
+    //resendMail(username){
+    //    var self = this;
+    //    this.usersApi.resendMail(username, (error, res) => {
+    //        this.handleServerResponce(error, res, self.resendMailSuccess, self.resendMailFailed );
+    //    })
+    //}
 
     registerFailed(payload) {
         console.log('REGISTRATION FAILED: '+payload.message+' code: '+payload.code);
@@ -50,32 +43,33 @@ class RegisterStore extends Marty.Store {
     registerSuccess(payload){
         this.setState({registError: null});
         this.app.navigationActionCreators.navigateToVerify(payload.data.username);
+
     }
 
 
 
-    handleServerResponce(error, res, onSuccess, onFail){
-        if(error){
-            return onFail(error);
-        }else{
-            var body = res.body;
-            if(body.status=='fail'|| body.status=='error'){
-                return onFail(body.message, body.code);
-            }else{
-                return onSuccess(body.data, body.message);
-            }
-        }
+    //handleServerResponce(error, res, onSuccess, onFail){
+    //    if(error){
+    //        return onFail(error);
+    //    }else{
+    //        var body = res.body;
+    //        if(body.status=='fail'|| body.status=='error'){
+    //            return onFail(body.message, body.code);
+    //        }else{
+    //            return onSuccess(body.data, body.message);
+    //        }
+    //    }
+    //}
+
+
+    verifMailSuccess(payload){
+        //console.log('Verif mail success.');
+        this.setState({didVerifSucceed:true, verifMessage:payload.message});
     }
 
-
-    verifMailSuccess(user, msg){
-        console.log('Verif mail success.');
-        this.setState({didVerifSucceed:true, verifMessage:msg});
-    }
-
-    verifMailFailed(exception){
+    verifMailFailed(payload){
         //console.log('Verif mail fail.');
-        this.setState({didVerifSucceed:false, verifMessage:exception});
+        this.setState({didVerifSucceed:false, verifMessage:payload.message});
     }
 
     resendMailSuccess(){
@@ -107,7 +101,7 @@ class RegisterStore extends Marty.Store {
         this.setState({registError: null});
     }
     clearVerifErrors(){
-        this.setState({verifMessage: null});
+        this.setState({verifMessage: ''});
     }
 
 }

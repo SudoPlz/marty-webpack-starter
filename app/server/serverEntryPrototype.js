@@ -32,6 +32,7 @@
 
     //css folder
     app.use('/styles', express.static(path.join('app', 'styles')));
+
     //app.set('styles', express.static(path.join('app', 'styles')));
     //app.engine('.ejs', require('ejs').__express);
     //app.set('views', 'bin');
