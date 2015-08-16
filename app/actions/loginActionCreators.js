@@ -15,10 +15,10 @@ class LoginActionCreators extends Marty.ActionCreators {
 
 
     attemptLogin(payLoad) {
-        //console.log('Attempting to log in with username: '+payLoad.username +' and password: '+payLoad.password);
-        //if(payLoad.rememberMe){
-        //    this.setState({rememberMe:true});
-        //}
+        //console.log('&&&&&&&&&& session: '+this.app.session.getToken());
+        //console.log('&&&&&&&&&& localStorage: '+this.app.localStorage.getToken());
+        this.app.session.clearToken();
+        this.app.localStorage.clearToken();
 
         this.app.usersApi.login(payLoad.username, payLoad.password).then(
                 res =>{
@@ -26,11 +26,13 @@ class LoginActionCreators extends Marty.ActionCreators {
                 let {status, code, message, data} = res;
                 if(status=='success'){
                     var token = data.token;
+
+
                     this.app.session.setToken(token);
                     this.app.localStorage.setToken(token);
-                    console.log('%%% - ABOUT to set username 1 sinse rememberMe is: '+payLoad.rememberMe);
+                    //console.log('%%% - ABOUT to set username 1 sinse rememberMe is: '+payLoad.rememberMe);
                     if(payLoad.rememberMe){
-                        console.log('%%% - ABOUT to set username 2 to: '+ payLoad.username);
+                        //console.log('%%% - ABOUT to set username 2 to: '+ payLoad.username);
                         this.app.localStorage.setUsername(payLoad.username);
                     }else{
                         this.app.localStorage.setUsername('');
@@ -54,8 +56,8 @@ class LoginActionCreators extends Marty.ActionCreators {
     attemptLogout(){
         console.log('Logout.');
         var token = this.app.loginStore.getToken();
-        this.app.session.logout();
-        this.app.localStorage.logout();
+        this.app.session.clearToken();
+        this.app.localStorage.clearToken();
         this.app.usersApi.logout(token).then(res =>{}, err=>{});
         this.dispatch(LoginConstants.LOGGED_OUT);
     }

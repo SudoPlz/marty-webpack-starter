@@ -9,7 +9,7 @@ class VerifyPage extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        console.log('Verify started..!');
+        //console.log('Verify started..!');
         //this.render = _.bind(this.render, this);
         this.handleAlertDismiss = _.bind(this.handleAlertDismiss, this);
         this.componentDidMount = _.bind(this.componentDidMount, this);

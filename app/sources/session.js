@@ -9,7 +9,7 @@ class Session extends Marty.SessionStorageStateSource {
     return this.get('token');
   }
 
-  logout() {
+  clearToken() {
     this.clear('token');
   }
 

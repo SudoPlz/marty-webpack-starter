@@ -37,15 +37,14 @@ class LocalStorage { //extends Marty.LocalStorageStateSource {
     }
 
 
-    logout() {
+    clearToken() {
         return Marty.isBrowser?window.localStorage.setItem('token', ''):null;
         //this.clear('token')
     }
 
-    //clear(key) {
-    //    return Marty.isBrowser?window.localStorage.clear(key):null;
-    ////    this.storage.clear(key);
-    //}
+    clearAllKeys() {
+        return Marty.isBrowser?window.localStorage.clear():null;
+    }
 }
 
 export default LocalStorage;
