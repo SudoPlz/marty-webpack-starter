@@ -159,8 +159,8 @@ class UserHttpAPI extends Marty.HttpStateSource {
 
 
     //TODO: Endpoint in backend does not yet exist for this
-    resendMail(username, next){
-        var url = format(endpoint + '/reconfirm');
+    resendMail(username){
+        var url = format(endpoint + '/signup/resendEmail');
 
         return this.request({
             url: url,

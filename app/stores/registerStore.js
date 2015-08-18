@@ -18,7 +18,8 @@ class RegisterStore extends Marty.Store {
         this.verifMailFailed = _.bind(this.verifMailFailed, this);
 
         this.handlers = {
-            //resendMail: RegisterConstants.RESEND_CONFIRM_MAIL,
+            resendMailSuccess: RegisterConstants.RECEIVE_MAIL_RESEND_SUCCESS,
+            resendMailFailure: RegisterConstants.RECEIVE_MAIL_RESEND_FAILED,
             //verifyMail: RegisterConstants.VERIFY_MAIL_ADDRESS,
             registerSuccess: RegisterConstants.RECEIVE_REGIST_SUCCESS,
             registerFailed: RegisterConstants.RECEIVE_REGIST_FAILED,
@@ -26,6 +27,13 @@ class RegisterStore extends Marty.Store {
             verifMailFailed: RegisterConstants.RECEIVE_MAIL_VERIF_FAILED
         };
 
+    }
+
+    resendMailFailure(payload){
+        console.log('resendMailFailure');
+    }
+    resendMailSuccess(payload){
+        console.log('resendMailSuccess');
     }
 
     //resendMail(username){

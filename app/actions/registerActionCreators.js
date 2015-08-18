@@ -31,28 +31,26 @@ class RegisterActionCreator extends Marty.ActionCreators {
         );
     }
 
-    reconfirmMail(username) {
+    resendEmail(username) {
 
-        this.app.usersApi.reconfirmMail(username, verificationId).then(
+        this.app.usersApi.resendMail(username).then(
                 res =>{
                 //console.log('Response received: '+JSON.stringify(res));
                 let {status, code, message, data} = res;
                 if(status=='success'){
                     //console.log('Verif  SUCCESS !');
-                    this.dispatch(RegisterConstants.RECEIVE_MAIL_VERIF_SUCCESS, {message: message, data: data});
+                    this.dispatch(RegisterConstants.RECEIVE_MAIL_RESEND_SUCCESS, {message: message});
                     //console.log('REGIST SUCCESS')
                 }else{
                     //console.log('Verif  FAILURE: '+message);
-                    this.dispatch(RegisterConstants.RECEIVE_MAIL_VERIF_FAILED, {message: message, code: code});
+                    this.dispatch(RegisterConstants.RECEIVE_MAIL_RESEND_FAILED, {message: message, code: code});
                 }
             },
                 err=>{
                 //console.log('registerActionCreators.attemptRegister err: '+err);
-                this.dispatch(RegisterConstants.RECEIVE_MAIL_VERIF_FAILED, {message: 'Huston our server is down and as a result puppies are dying right now. Please try again later.'});
+                this.dispatch(RegisterConstants.RECEIVE_MAIL_RESEND_FAILED, {message: 'Huston our server is down and as a result puppies are dying right now. Please try again later.'});
             }
         );
-
-        this.dispatch(RegisterConstants.RESEND_CONFIRM_MAIL, username);
     }
 
     verifyMailAddressById(username, verificationId){
