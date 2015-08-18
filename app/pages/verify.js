@@ -13,7 +13,7 @@ class VerifyPage extends React.Component {
         //this.render = _.bind(this.render, this);
         this.handleAlertDismiss = _.bind(this.handleAlertDismiss, this);
         this.componentDidMount = _.bind(this.componentDidMount, this);
-        this.reconfirmEmail = _.bind(this.reconfirmEmail, this);
+        this.resendEmail = _.bind(this.resendEmail, this);
         this.state = {
             alertVisible: false,
             isLoading: true
@@ -37,10 +37,10 @@ class VerifyPage extends React.Component {
         }
     }
 
-    reconfirmEmail(){
+    resendEmail(){
         console.log('Resending an email..!');
         //TODO: Check if reconfirm works AFTER I implement it in backend
-        this.app.registerActionCreators.reconfirmMail(this.props.params.username);
+        this.app.registerActionCreators.resendEmail(this.props.params.username);
         this.setState({alertVisible:true});
     }
 
@@ -64,7 +64,7 @@ class VerifyPage extends React.Component {
                             {<Popover placement='right' title='Reconfirmation button'>
                             Make sure you wait at least 10 minutes before you hit this button.
                             </Popover>}>
-                            <Button bsStyle='primary' onClick={this.reconfirmEmail}>Reconfirm mail</Button>
+                            <Button bsStyle='primary' onClick={this.resendEmail}>Resend mail</Button>
                         </OverlayTrigger>
                     </Jumbotron>
                 </div>

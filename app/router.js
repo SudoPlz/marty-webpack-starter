@@ -27,7 +27,7 @@ module.exports = {
     },
 
     transitionTo(to, params, query) {
-        console.log('My Transition to '+to+' ran.');
+        //console.log('My Transition to '+to+' ran.');
         return router.transitionTo(to, params, query);
     },
 

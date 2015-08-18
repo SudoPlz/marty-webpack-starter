@@ -68,7 +68,7 @@ class LoginStore extends Marty.Store {
                     var tok = this.app.session.getToken() || this.app.localStorage.getToken();
                     //console.log('Token exists session: '+!!this.app.session.getToken()+ ' local storage: '+!!this.app.localStorage.getToken()+' ::'+(typeof tok!=undefined));
                     if(tok != null && tok.length>0){
-                        console.log('Got old token: '+tok);
+                        console.log('loginStore: Got old token.');
                         //this.app.session.setToken(tok);
                         this.setState({token: tok});
                     }

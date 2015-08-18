@@ -1,6 +1,9 @@
 body {
   background: #ffcda1; }
 
+.drowpDownNavBar {
+  padding-left: 51em; }
+
 .thumbText {
   text-align: center;
   font-style: italic;

@@ -78,7 +78,27 @@ class LoginActionCreators extends Marty.ActionCreators {
                 }
             },
                 err=>{
-                    return next(false, err);
+                return next(false, err);
+            }
+        );
+    }
+
+    attemptChangeEmail(newEmail, next){
+        console.log('newEmail');
+        var token = this.app.loginStore.getToken();
+
+        this.app.usersApi.changeEmail(token, newEmail).then(
+                res =>{
+                //console.log('Response received: '+JSON.stringify(res));
+                let {status, code, message} = res;
+                if(status=='success'){
+                    return next(true, message);
+                }else{
+                    return next(false, message);
+                }
+            },
+                err=>{
+                return next(false, err);
             }
         );
     }

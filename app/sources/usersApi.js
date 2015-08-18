@@ -85,6 +85,16 @@ class UserHttpAPI extends Marty.HttpStateSource {
     }
 
 
+    changeEmail(token, newEmail){
+        var url = format(endpoint + '/changeCredentials/email');
+        return this.request({
+            url: url,
+            headers:{Authorization:'Bearer '+token},
+            method: 'POST',
+            body: { userToken:token, newEmail:newEmail}
+        }).then(this.handleRes);
+    }
+
     logout(token) {
         var url = format(endpoint + '/logout');
         return this.request({

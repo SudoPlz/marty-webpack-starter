@@ -44,7 +44,7 @@ class MyNavbar extends React.Component {
 
     render(){
         var loggedInNavBar =
-            (<Nav navbar right onSelect={this.handleSelect}>
+            (<Nav navbar right onSelect={this.handleSelect} >
                 <DropdownButton title={this.props.user?this.props.user.username:'User'} navItem>
                     <MenuItem eventKey='profile'>Profile</MenuItem>
                     <MenuItem divider />
@@ -69,7 +69,7 @@ class MyNavbar extends React.Component {
                             <NavItemLink to='about'>About</NavItemLink>
 
                         </Nav>
-                        {(this.props.user)?loggedInNavBar:loggedOutNavBar}
+                        <div className='drowpDownNavBar'>{(this.props.user)?loggedInNavBar:loggedOutNavBar}</div>
                     </CollapsibleNav>
                 </Navbar>
             </div>

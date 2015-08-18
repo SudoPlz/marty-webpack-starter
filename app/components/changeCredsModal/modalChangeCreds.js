@@ -48,6 +48,7 @@ class ModalChangeCreds extends React.Component {
 
     onHide(){
         //console.log('ON hide.');
+        this.setState({alertBox:{msg:'',style:null}});
         if(this.props.closeFunc){
             this.props.closeFunc();
         }
@@ -84,7 +85,7 @@ class ModalChangeCreds extends React.Component {
         let MailBody =
             <Modal.Body>
                 <h5>Type your new mail address.</h5>
-                <Input name='newEmailInput' type='text' placeholder='Email address' label={this.state.labelOne.error}
+                <Input name='newEmailInput' ref='newEmailInput' type='text' placeholder='Email address' label={this.state.labelOne.error}
                        required={true} minLength={6} bsStyle={this.state.labelOne.style} onKeyDown={this.onKeyDown} onChange={
                     (e)=>{
                        var curEmail = e.target.value;
@@ -215,9 +216,8 @@ class ModalChangeCreds extends React.Component {
     //    }
     //}
     saveFunc(e){
-
+        this.setState({alertBox:{msg:'',style:null}});
         if(this.props.changeType=='password'){
-
             let oldPassword = this.refs.oldPasswordCredInput.getValue();
             let newPassword = this.refs.newPasswordCredInput.getValue();
             console.log('Old: '+oldPassword+' new: '+newPassword);
@@ -241,8 +241,29 @@ class ModalChangeCreds extends React.Component {
                     bsStyle='danger';
                     this.setState({alertBox:{msg:msg,style:bsStyle}});
                 }
+            });
+        }else if(this.props.changeType=='email'){
 
+            let newEmail = this.refs.newEmailInput.getValue();
+            console.log('New mail: '+newEmail);
+            this.app.loginActionCreators.attemptChangeEmail(newEmail,  (done, msg)=>{
+                console.log('Result: '+done);
+                var bsStyle;
+                if(done) {
+                    bsStyle = 'success';
+                    if (this.props.parentAlertBox) {
+                        this.props.parentAlertBox(bsStyle, msg);
+                    } else {
+                        this.setState({alertBox: {msg: msg, style: bsStyle}});
+                    }
+                    console.log('About to call closeFunc');
+                    this.props.closeFunc();
 
+                }
+                else{
+                    bsStyle='danger';
+                    this.setState({alertBox:{msg:msg,style:bsStyle}});
+                }
 
 
             });
@@ -263,10 +284,10 @@ export default Marty.createContainer(ModalChangeCreds, {
         //error() {
         //    return this.app.loginStore.getError();
         //},
-        //user(){
-        //    var usr = this.app.loginStore.getUser();
-        //    return (!usr)?false:usr;
-        //}
+        user(){
+            var usr = this.app.loginStore.getUser();
+            return (!usr)?false:usr;
+        }
         //,isLoggedIn(){
         //    return this.app.loginStore.isLoggedIn();
         //}
