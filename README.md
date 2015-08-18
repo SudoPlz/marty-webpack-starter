@@ -3,6 +3,13 @@
 <p align="center">
   <img src="http://formatjs.io/img/react.svg"  height="242" width="242"/>
 </p>
+
+
+
+
+
+
+
 #My uber isomorphic web app:
 
 ##What is this?
@@ -43,6 +50,11 @@ What happens on the background is, webpack gets the server files from `/app/serv
 
 Then another webpack process takes the same files (since the site is isomorphic) starting at `/app/index.js`, fires up a hot reloading server (based on our special proxy) and serves the files.
 
+####Example
+*Profile page*
+<p align="center">
+  <img src="https://app.box.com/representation/file_version_34377759213/image_2048/1.png?shared_name=57fss2ygbe6osrsahnfmakzv8sm80gs7"  height="300" width="800"/>
+</p>
 
 
 
